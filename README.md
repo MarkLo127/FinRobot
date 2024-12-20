@@ -58,16 +58,7 @@ conda activate finrobot
 git clone https://github.com/MarkLo127/FinRobot.git
 cd FinRobot
 ```
-**3. install finrobot & dependencies from source or pypi**
 
-get our latest release from pypi
-```bash
-pip install -U finrobot
-```
-or install from this repo directly
-```
-pip install -e .
-```
 **4. modify OAI_CONFIG_LIST_sample file**
 ```shell
 1) rename OAI_CONFIG_LIST_sample to OAI_CONFIG_LIST
