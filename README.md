@@ -55,7 +55,7 @@ The main folder **finrobot** has three subfolders **agents, data_source, functio
 
 ```
 FinRobot
-├── finrobot (main folder)
+├── finrobot_zh (main folder)
 │   ├── agents
 │   	├── agent_library.py
 │   	└── workflow.py
