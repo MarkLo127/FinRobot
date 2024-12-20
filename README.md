@@ -1,19 +1,10 @@
-# FinRobot: An Open-Source AI Agent Platform for Financial Analysis using Large Language Models
+# FinRobot: 使用大型語言模型進行財務分析的開源人工智慧代理平台
 
 <div align="center">
 <img align="center" src=figs/logo_white_background.jpg width="40%"/>
 </div>
 
 **FinRobot** is an AI Agent Platform that transcends the scope of FinGPT, representing a comprehensive solution meticulously designed for financial applications. It integrates **a diverse array of AI technologies**, extending beyond mere language models. This expansive vision highlights the platform's versatility and adaptability, addressing the multifaceted needs of the financial industry.
-
-**Concept of AI Agent**: an AI Agent is an intelligent entity that uses large language models as its brain to perceive its environment, make decisions, and execute actions. Unlike traditional artificial intelligence, AI Agents possess the ability to independently think and utilize tools to progressively achieve given objectives.
-
-[Whitepaper of FinRobot](https://arxiv.org/abs/2405.14767)
-
-[![](https://dcbadge.vercel.app/api/server/trsr8SXpW5)](https://discord.gg/trsr8SXpW5)
-
-![Visitors](https://api.visitorbadge.io/api/VisitorHit?user=AI4Finance-Foundation&repo=FinRobot&countColor=%23B17A)
-
 
 ## FinRobot Ecosystem
 <div align="center">
@@ -259,31 +250,5 @@ assistant.chat(message, use_cache=True, max_turns=50,
 8. **Quality Assurance**: check word counts
 
 
-## Citing FinRobot
-```
-@inproceedings{
-zhou2024finrobot,
-title={FinRobot: {AI} Agent for Equity Research and Valuation with Large Language Models},
-author={Tianyu Zhou and Pinqiao Wang and Yilin Wu and Hongyang Yang},
-booktitle={ICAIF 2024: The 1st Workshop on Large Language Models and Generative AI for Finance},
-year={2024}
-}
 
-@article{yang2024finrobot,
-  title={FinRobot: An Open-Source AI Agent Platform for Financial Applications using Large Language Models},
-  author={Yang, Hongyang and Zhang, Boyu and Wang, Neng and Guo, Cheng and Zhang, Xiaoli and Lin, Likun and Wang, Junlin and Zhou, Tianyu and Guan, Mao and Zhang, Runjia and others},
-  journal={arXiv preprint arXiv:2405.14767},
-  year={2024}
-}
-
-@inproceedings{han2024enhancing,
-  title={Enhancing Investment Analysis: Optimizing AI-Agent Collaboration in Financial Research},
-  author={Han, Xuewen and Wang, Neng and Che, Shangkun and Yang, Hongyang and Zhang, Kunpeng and Xu, Sean Xin},
-  booktitle={ICAIF 2024: Proceedings of the 5th ACM International Conference on AI in Finance},
-  pages={538--546},
-  year={2024}
-}
-```
 **Disclaimer**: The codes and documents provided herein are released under the Apache-2.0 license. They should not be construed as financial counsel or recommendations for live trading. It is imperative to exercise caution and consult with qualified financial professionals prior to any trading or investment actions.
-
-
