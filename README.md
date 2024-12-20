@@ -6,7 +6,10 @@
 <div align="center">
 </div>
 
+
 **FinRobot** 是一個超越 FinGPT 範疇的 AI 代理平台，代表了一個專為金融應用精心設計的全方位解決方案。它整合了**多種 AI 技術**，不僅僅局限於語言模型。這種宏大的願景突顯了該平台的多功能性與適應性，能夠滿足金融行業多方面的需求。
+
+
 
 **AI Agent**的概念：AI Agent是一個智慧實體，它使用大型語言模型作為大腦來感知環境、做出決策和執行行動。與傳統人工智慧不同，AI Agent 具有獨立思考和利用工具逐步實現既定目標的能力。
 
@@ -78,6 +81,8 @@ pip install -e .
 3) add your own finnhub-api "YOUR_FINNHUB_API_KEY"
 4) add your own financialmodelingprep and sec-api keys "YOUR_FMP_API_KEY" and "YOUR_SEC_API_KEY" (for financial report generation)
 ```
+
+
 
 **Financial CoT**:
 1. **Gather Preliminary Data**: 10-K report, market data, financial ratios
