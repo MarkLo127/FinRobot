@@ -1,44 +1,36 @@
 <div align="center">
 </div>
 
-# FinRobot: An Open-Source AI Agent Platform for Financial Analysis using Large Language Models
-
-
-
-
+# FinRobot: 使用大型語言模型進行財務分析的開源人工智慧代理平台 
 
 <div align="center">
 </div>
 
-**FinRobot** is an AI Agent Platform that transcends the scope of FinGPT, representing a comprehensive solution meticulously designed for financial applications. It integrates **a diverse array of AI technologies**, extending beyond mere language models. This expansive vision highlights the platform's versatility and adaptability, addressing the multifaceted needs of the financial industry.
+**FinRobot** 是一個超越 FinGPT 範疇的 AI 代理平台，代表了一個專為金融應用精心設計的全方位解決方案。它整合了**多種 AI 技術**，不僅僅局限於語言模型。這種宏大的願景突顯了該平台的多功能性與適應性，能夠滿足金融行業多方面的需求。
 
-**Concept of AI Agent**: an AI Agent is an intelligent entity that uses large language models as its brain to perceive its environment, make decisions, and execute actions. Unlike traditional artificial intelligence, AI Agents possess the ability to independently think and utilize tools to progressively achieve given objectives.
-
-
-
+**AI Agent**的概念：AI Agent是一個智慧實體，它使用大型語言模型作為大腦來感知環境、做出決策和執行行動。與傳統人工智慧不同，AI Agent 具有獨立思考和利用工具逐步實現既定目標的能力。
 
 ## FinRobot Ecosystem
 <div align="center">
 <img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/6b30d9c1-35e5-4d36-a138-7e2769718f62" width="90%"/>
 </div>
 
-### The overall framework of FinRobot is organized into four distinct layers, each designed to address specific aspects of financial AI processing and application:
-1. **Financial AI Agents Layer**: The Financial AI Agents Layer now includes Financial Chain-of-Thought (CoT) prompting, enhancing complex analysis and decision-making capacity. Market Forecasting Agents, Document Analysis Agents, and Trading Strategies Agents utilize CoT to dissect financial challenges into logical steps, aligning their advanced algorithms and domain expertise with the evolving dynamics of financial markets for precise, actionable insights.
-2. **Financial LLMs Algorithms Layer**: The Financial LLMs Algorithms Layer configures and utilizes specially tuned models tailored to specific domains and global market analysis. 
-3. **LLMOps and DataOps Layers**: The LLMOps layer implements a multi-source integration strategy that selects the most suitable LLMs for specific financial tasks, utilizing a range of state-of-the-art models. 
-4. **Multi-source LLM Foundation Models Layer**: This foundational layer supports the plug-and-play functionality of various general and specialized LLMs. 
-
+### FinRobot 的整體框架分為四個不同的層，每個層都旨在解決金融人工智慧處理和應用的特定方面:
+1. **Financial AI Agents Layer**: 金融AI代理層現包含金融思維鏈（CoT）提示，增強複雜分析與決策能力。市場預測代理、文件分析代理和交易策略代理利用 CoT 將金融挑戰分解為邏輯步驟，將其先進的演算法和領域專業知識與金融市場不斷變化的動態相結合，以獲得精確、可操作的見解。
+2. **Financial LLMs Algorithms Layer**: 金融LLMs演算法層：金融LLMs演算法層配置和利用針對特定領域和全球市場分析專門調整的模型。
+3. **LLMOps and DataOps Layers**: LLMOps 層實作多源整合策略，利用一系列最先進的模式為特定財務任務選擇最適合的 LLMs。 
+4. **Multi-source LLM Foundation Models Layer**: 此基礎層支援各種通用和專用LLMs的即插即用功能。
 
 ## FinRobot: Agent Workflow
 <div align="center">
 <img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/ff8033be-2326-424a-ac11-17e2c9c4983d" width="60%"/>
 </div>
 
-1. **Perception**: This module captures and interprets multimodal financial data from market feeds, news, and economic indicators, using sophisticated techniques to structure the data for thorough analysis.
+1. **Perception**: 此模組可擷取並解釋來自市場反饋、新聞和經濟指標的多模式金融數據，使用複雜的技術建立數據以進行徹底分析。
 
-2. **Brain**: Acting as the core processing unit, this module perceives data from the Perception module with LLMs and utilizes Financial Chain-of-Thought (CoT) processes to generate structured instructions.
+2. **Brain**: 作為核心處理單元，該模組透過LLMs感知來自感知模組的數據，並利用金融思想鏈（CoT）流程產生結構化指令。
 
-3. **Action**: This module executes instructions from the Brain module, applying tools to translate analytical insights into actionable outcomes. Actions include trading, portfolio adjustments, generating reports, or sending alerts, thereby actively influencing the financial environment.
+3. **Action**: 此模組執行來自大腦模組的指令，應用工具將分析見解轉化為可行的結果。行動包括交易、投資組合調整、產生報告或發送警報，從而積極影響金融環境。
 
 ## FinRobot: Smart Scheduler
 <div align="center">
@@ -46,54 +38,10 @@
 </div>
 
 The Smart Scheduler is central to ensuring model diversity and optimizing the integration and selection of the most appropriate LLM for each task.
-* **Director Agent**: This component orchestrates the task assignment process, ensuring that tasks are allocated to agents based on their performance metrics and suitability for specific tasks.
-* **Agent Registration**: Manages the registration and tracks the availability of agents within the system, facilitating an efficient task allocation process.
-* **Agent Adaptor**: Tailor agent functionalities to specific tasks, enhancing their performance and integration within the overall system.
-* **Task Manager**: Manages and stores different general and fine-tuned LLMs-based agents tailored for various financial tasks, updated periodically to ensure relevance and efficacy.
-
-## File Structure
-
-The main folder **finrobot** has three subfolders **agents, data_source, functional**. 
-
-```
-FinRobot
-├── finrobot (main folder)
-│   ├── agents
-│   	├── agent_library.py
-│   	└── workflow.py
-│   ├── data_source
-│   	├── finnhub_utils.py
-│   	├── finnlp_utils.py
-│   	├── fmp_utils.py
-│   	├── sec_utils.py
-│   	└── yfinance_utils.py
-│   ├── functional
-│   	├── analyzer.py
-│   	├── charting.py
-│   	├── coding.py
-│   	├── quantitative.py
-│   	├── reportlab.py
-│   	└── text.py
-│   ├── toolkits.py
-│   └── utils.py
-│
-├── configs
-├── experiments
-├── tutorials_beginner (hands-on tutorial)
-│   ├── agent_fingpt_forecaster.ipynb
-│   └── agent_annual_report.ipynb 
-├── tutorials_advanced (advanced tutorials for potential finrobot developers)
-│   ├── agent_trade_strategist.ipynb
-│   ├── agent_fingpt_forecaster.ipynb
-│   ├── agent_annual_report.ipynb 
-│   ├── lmm_agent_mplfinance.ipynb
-│   └── lmm_agent_opt_smacross.ipynb
-├── setup.py
-├── OAI_CONFIG_LIST_sample
-├── config_api_keys_sample
-├── requirements.txt
-└── README.md
-```
+* **Director Agent**: 此元件協調任務分配過程，確保根據代理人的績效指標和對特定任務的適用性將任務指派給代理人。
+* **Agent Registration**: 管理註冊並追蹤系統內代理的可用性，促進高效率的任務分配過程。
+* **Agent Adaptor**: 根據特定任務自訂代理功能，增強其效能以及在整個系統中的整合。
+* **Task Manager**: 管理和儲存針對各種財務任務量身定制的不同常規和微調的基於 LLMs 的代理，並定期更新以確保相關性和有效性。
 
 ## Installation:
 
