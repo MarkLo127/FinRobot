@@ -1,0 +1,54 @@
+# NOTE(robinson) - Sections are listed in the following document from SEC
+# ref: https://www.sec.gov/files/form10-q.pdf
+SECTIONS_10Q = (
+    # Part I - Financial information
+    "FINANCIAL_STATEMENTS",  # ITEM 1
+    "MANAGEMENT_DISCUSSION",  # ITEM 2
+    "MARKET_RISK_DISCLOSURES",  # ITEM 3
+    "CONTROLS_AND_PROCEDURES",  # ITEM 4
+    # Part II - Other information
+    "LEGAL_PROCEEDINGS",  # ITEM 1
+    "RISK_FACTORS",  # ITEM 1A
+    "USE_OF_PROCEEDS",  # ITEM 2
+    "DEFAULTS",  # ITEM 3
+    "MINE_SAFETY",  # ITEM 4
+    "OTHER_INFORMATION",  # ITEM 5
+)
+
+SECTIONS_S1 = [
+    "PROSPECTUS_SUMMARY",
+    "ABOUT_PROSPECTUS",
+    "FORWARD_LOOKING_STATEMENTS",
+    "RISK_FACTORS",
+    "USE_OF_PROCEEDS",
+    "DIVIDEND_POLICY",
+    "CAPITALIZATION",
+    "DILUTION",
+    "MANAGEMENT_DISCUSSION",
+    "BUSINESS",
+    "MANAGEMENT",
+    "COMPENSATION",
+    "RELATED_PARTY_TRANSACTIONS",
+    "PRINCIPAL_STOCKHOLDERS",
+    "DESCRIPTION_OF_STOCK",
+    "DESCRIPTION_OF_DEBT",
+    "FUTURE_SALE",
+    "US_TAX",
+    "UNDERWRITING",
+    "LEGAL_MATTERS",
+    "EXPERTS",
+    "MORE_INFORMATION",
+]
+
+# NOTE - Sections are listed in the following document from SEC
+# ref: https://www.sec.gov/files/form20-f.pdf
+SECTIONS_20F = (
+    "INTRODUCTION",  # ITEM 1
+    "PRESENTATION_OF_FINANCIAL_AND_OTHER_INFORMATION",  # ITEM 2
+    "KEY_INFORMATION",  # ITEM 3
+    "INFORMATION_ON_THE_COMPANY",  # ITEM 4
+    "OPERATING_AND_FINANCIAL_REVIEW_AND_PROSPECTS",  # ITEM 5
+    "DIRECTORS_AND_SENIOR_MANAGEMENT",  # ITEM 6
+    "ADDITIONAL_INFORMATION",  # ITEM 7
+)
+
