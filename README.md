@@ -55,7 +55,10 @@ conda activate finrobot
 git clone https://github.com/MarkLo127/FinRobot.git
 cd FinRobot
 ```
-
+**3.Install dependency items**
+```shell
+pip install -r requirements.txt
+```
 **4. modify OAI_CONFIG_LIST_sample file**
 ```shell
 1) rename OAI_CONFIG_LIST_sample to OAI_CONFIG_LIST
