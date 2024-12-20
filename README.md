@@ -6,10 +6,7 @@
 <div align="center">
 </div>
 
-
 **FinRobot** 是一個超越 FinGPT 範疇的 AI 代理平台，代表了一個專為金融應用精心設計的全方位解決方案。它整合了**多種 AI 技術**，不僅僅局限於語言模型。這種宏大的願景突顯了該平台的多功能性與適應性，能夠滿足金融行業多方面的需求。
-
-
 
 **AI Agent**的概念：AI Agent是一個智慧實體，它使用大型語言模型作為大腦來感知環境、做出決策和執行行動。與傳統人工智慧不同，AI Agent 具有獨立思考和利用工具逐步實現既定目標的能力。
 
@@ -40,7 +37,7 @@
 <img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/06fa0b78-ac53-48d3-8a6e-98d15386327e" width="60%"/>
 </div>
 
-The Smart Scheduler is central to ensuring model diversity and optimizing the integration and selection of the most appropriate LLM for each task.
+智慧調度程序對於確保模型多樣性以及優化整合和選擇最適合每項任務的LLM至關重要。
 * **Director Agent**: 此元件協調任務分配過程，確保根據代理人的績效指標和對特定任務的適用性將任務指派給代理人。
 * **Agent Registration**: 管理註冊並追蹤系統內代理的可用性，促進高效率的任務分配過程。
 * **Agent Adaptor**: 根據特定任務自訂代理功能，增強其效能以及在整個系統中的整合。
@@ -72,8 +69,6 @@ cd FinRobot
 3) add your own finnhub-api "YOUR_FINNHUB_API_KEY"
 4) add your own financialmodelingprep and sec-api keys "YOUR_FMP_API_KEY" and "YOUR_SEC_API_KEY" (for financial report generation)
 ```
-
-
 
 **Financial CoT**:
 1. **Gather Preliminary Data**: 10-K report, market data, financial ratios
