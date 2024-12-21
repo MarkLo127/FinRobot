@@ -1,6 +1,6 @@
 [submodule "FinNLP"]
-path = /FinNLP
-url = https://github.com/AI4Finance-Foundation/FinNLP.git
+	path = FinNLP
+	url = https://github.com/AI4Finance-Foundation/FinNLP.git
 [submodule "FinNLP/FinNLP"]
 	path = FinNLP/FinNLP
 	url = https://github.com/AI4Finance-Foundation/FinNLP.git
