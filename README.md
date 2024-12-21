@@ -73,7 +73,7 @@ pip install -r requirements.txt
 4) add your own financialmodelingprep and sec-api keys "YOUR_FMP_API_KEY" and "YOUR_SEC_API_KEY" (for financial report generation)
 ```
 
-# finrobot_zh 專案介紹
+# finrobot_zh
 
 本專案以 [AI4Finance 基金會的 FinRobot](https://github.com/AI4Finance-Foundation/FinRobot) 為基礎，進行功能強化與本地化，特別針對繁體中文使用者進行了優化，並新增了對 20-F 財務文件的支援。
 
@@ -84,7 +84,7 @@ pip install -r requirements.txt
 2. **繁體中文本地化**  
    - 提供完整的繁體中文界面及操作說明，讓中文使用者能夠更輕鬆地使用與理解。
 
-**Financial CoT
+# Financial CoT
 1. **收集初步數據**: 10-K 報告、市場數據、財務比率
 2. **分析財務報表**: 資產負債表、損益表、現金流量表
 3. **公司概況與績效**: 公司描述、業務亮點、市場分析
