@@ -45,27 +45,27 @@
 
 ## Installation:
 
-**1. (Recommended) Create a new virtual environment**
+**1.創建新的虛擬環境**
 ```shell
 conda create --name finrobot python=3.10
 conda activate finrobot
 ```
-**2. download the FinRobot repo use terminal or download it manually**
+**2.使用終端機下載FinRobot**
 ```shell
 git clone https://github.com/MarkLo127/FinRobot.git
 cd FinRobot
 ```
-**3.Install dependency items**
+**3.安裝依賴項**
 ```shell
 pip install -r requirements.txt
 ```
-**4. modify OAI_CONFIG_LIST_sample file**
+**4.修改OAI_CONFIG_LIST_sample**
 ```shell
 1) rename OAI_CONFIG_LIST_sample to OAI_CONFIG_LIST
 2) remove the four lines of comment within the OAI_CONFIG_LIST file
 3) add your own openai api-key <your OpenAI API key here>
 ```
-**5. modify config_api_keys_sample file**
+**5.修改config_api_keys_sample**
 ```shell
 1) rename config_api_keys_sample to config_api_keys
 2) remove the comment within the config_api_keys file
@@ -74,15 +74,14 @@ pip install -r requirements.txt
 ```
 
 **Financial CoT**:
-1. **Gather Preliminary Data**: 10-K report, market data, financial ratios
-2. **Analyze Financial Statements**: balance sheet, income statement, cash flow
-3. **Company Overview and Performance**: company description, business highlights, segment analysis
-4. **Risk Assessment**: assess risks
-5. **Financial Performance Visualization**:  plot PE ratio and EPS
-6. **Synthesize Findings into Paragraphs**: combine all parts into a coherent summary
-7. **Generate PDF Report**: use tools to generate PDF automatically
-8. **Quality Assurance**: check word counts
+1. **收集初步數據**: 10-K 報告、市場數據、財務比率
+2. **分析財務報表**: 資產負債表、損益表、現金流量表
+3. **公司概況與績效**: 公司描述、業務亮點、市場分析
+4. **風險評估**: 風險評估
+5. **財務績效視覺化**:  繪製本益比和每股盈餘
+6. **將調查結果綜合成段落**: 將所有部分組合成重點摘要
+7. **產生PDF報告**: 使用工具自動產生PDF
+8. **品質保證**: 檢查字數
 
 
-**Disclaimer**: The codes and documents provided herein are released under the Apache-2.0 license. They should not be construed as financial counsel or recommendations for live trading. It is imperative to exercise caution and consult with qualified financial professionals prior to any trading or investment actions.
-
+**免責聲明**: 本文提供的程式碼和文件是在 Apache-2.0 許可下發布的。它們不應被視為財務顧問或即時交易建議。在進行任何交易或投資行動之前，必須謹慎行事並諮詢合格的金融專業人士。
