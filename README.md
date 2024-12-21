@@ -1,7 +1,7 @@
 <div align="center">
 </div>
 
-# FinRobot: 使用大型語言模型進行財務分析的開源人工智慧代理平台 
+# FinRobot 
 
 <div align="center">
 </div>
