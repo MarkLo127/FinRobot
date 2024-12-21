@@ -73,6 +73,20 @@ pip install -r requirements.txt
 4) add your own financialmodelingprep and sec-api keys "YOUR_FMP_API_KEY" and "YOUR_SEC_API_KEY" (for financial report generation)
 ```
 
+# finrobot_zh 專案介紹
+
+本專案以 [AI4Finance 基金會的 FinRobot](https://github.com/AI4Finance-Foundation/FinRobot) 為基礎，進行功能強化與本地化，特別針對繁體中文使用者進行了優化，並新增了對 20-F 財務文件的支援。
+
+## 功能增強與特色
+1. **20-F 支援**  
+   - 增加對美國上市外國公司年報文件（20-F）的解析與關鍵訊息提取功能，幫助投資者快速掌握企業在 SEC 文件中的重要數據。
+   
+2. **繁體中文本地化**  
+   - 提供完整的繁體中文界面及操作說明，讓中文使用者能夠更輕鬆地使用與理解。
+
+3. **多語言支援**  
+   - 除了繁體中文，仍保留英文功能，滿足不同語言使用者的需求。
+
 **Financial CoT**:
 1. **收集初步數據**: 10-K 報告、市場數據、財務比率
 2. **分析財務報表**: 資產負債表、損益表、現金流量表
