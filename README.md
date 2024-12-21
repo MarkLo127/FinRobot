@@ -1,7 +1,7 @@
 <div align="center">
 </div>
 
-# FinRobot 
+# FinRobot : 財務分析的開源 AI 平台
 
 <div align="center">
 </div>
