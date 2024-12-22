@@ -53,7 +53,7 @@
 * **Agent Adaptor**: 根據特定任務自訂代理功能，增強其效能以及在整個系統中的整合
 * **Task Manager**: 管理和儲存針對各種財務任務量身定制的不同常規和微調的基於 LLMs 的代理，並定期更新以確保相關性和有效性
 
-## Installation:
+## Installation
 
 **1.創建新的虛擬環境**
 ```shell
