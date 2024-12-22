@@ -17,9 +17,9 @@
 
 ## Framework
 
-1. **Financial AI Agents Layer**: 金融 AI 代理層利用金融思維鏈（CoT），將複雜金融問題分解為邏輯步驟。市場預測、文件分析和交易策略代理結合先進演算法與專業知識，適應市場動態，提供精準且可操作的見解
-2. **Financial LLMs Algorithms Layer**: 金融LLMs演算法層配置和利用針對特定領域和全球市場分析專門調整的模型
-3. **LLMOps and DataOps Layers**: LLMOps 層實作多源整合策略，利用一系列最先進的模式為特定財務任務選擇最適合的 LLMs
+1. **Financial AI Agents Layer**: 利用金融思維鏈（CoT），將複雜金融問題分解為邏輯步驟。市場預測、文件分析和交易策略代理結合先進演算法與專業知識，適應市場動態，提供精準且可操作的見解
+2. **Financial LLMs Algorithms Layer**: 配置和利用針對特定領域和全球市場分析專門調整的模型
+3. **LLMOps and DataOps Layers**: 實作多源整合策略，利用一系列最先進的模式為特定財務任務選擇最適合的 LLMs
 4. **Multi-source LLM Foundation Models Layer**: 支援各種通用和專用LLMs的即插即用功能
 
 ## Financial CoT
