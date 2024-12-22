@@ -42,7 +42,7 @@
 
 3. **Action**: 執行來自大腦模組的指令，應用工具將分析見解轉化為可行的結果。行動包括交易、投資組合調整、產生報告或發送警報，從而積極影響金融環境
 
-## FinRobot: Smart Scheduler
+## Smart Scheduler
 <div align="center">
 <img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/06fa0b78-ac53-48d3-8a6e-98d15386327e" width="60%"/>
 </div>
