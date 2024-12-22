@@ -260,9 +260,9 @@ assistant.chat(message, use_cache=True, max_turns=50,
                summary_method="last_msg")
 ```
 4. Result
-<div align="center">
-<img align="center" src="https://github.com/MarkLo127/FinRobot/blob/main/assets/Apple_Annual_Report_2024-1.png" width="60%"/>
-<img align="center" src="https://github.com/MarkLo127/FinRobot/blob/main/assets/Apple_Annual_Report_2024-2.png" width="60%"/>
+<div style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+  <img src="https://github.com/MarkLo127/FinRobot/blob/main/assets/Apple_Annual_Report_2024-1.png" style="width: 45%;" />
+  <img src="https://github.com/MarkLo127/FinRobot/blob/main/assets/Apple_Annual_Report_2024-2.png" style="width: 45%;" />
 </div>
 
 #
