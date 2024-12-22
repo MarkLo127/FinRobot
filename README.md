@@ -18,9 +18,9 @@
 ### FinRobot 的整體框架分為四個不同的層，每個層都旨在解決金融人工智慧處理和應用的特定方面:
 
 1. **Financial AI Agents Layer**: 金融 AI 代理層利用金融思維鏈（CoT），將複雜金融問題分解為邏輯步驟。市場預測、文件分析和交易策略代理結合先進演算法與專業知識，適應市場動態，提供精準且可操作的見解
-2. **Financial LLMs Algorithms Layer**: 金融LLMs演算法層配置和利用針對特定領域和全球市場分析專門調整的模型。
-3. **LLMOps and DataOps Layers**: LLMOps 層實作多源整合策略，利用一系列最先進的模式為特定財務任務選擇最適合的 LLMs。 
-4. **Multi-source LLM Foundation Models Layer**: 此基礎層支援各種通用和專用LLMs的即插即用功能。
+2. **Financial LLMs Algorithms Layer**: 金融LLMs演算法層配置和利用針對特定領域和全球市場分析專門調整的模型
+3. **LLMOps and DataOps Layers**: LLMOps 層實作多源整合策略，利用一系列最先進的模式為特定財務任務選擇最適合的 LLMs
+4. **Multi-source LLM Foundation Models Layer**: 支援各種通用和專用LLMs的即插即用功能
 
 ## FinRobot: Agent Workflow
 <div align="center">
@@ -38,11 +38,11 @@
 <img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/06fa0b78-ac53-48d3-8a6e-98d15386327e" width="60%"/>
 </div>
 
-智慧調度程序對於確保模型多樣性以及優化整合和選擇最適合每項任務的LLM至關重要。
-* **Director Agent**: 此元件協調任務分配過程，確保根據代理人的績效指標和對特定任務的適用性將任務指派給代理人。
-* **Agent Registration**: 管理註冊並追蹤系統內代理的可用性，促進高效率的任務分配過程。
-* **Agent Adaptor**: 根據特定任務自訂代理功能，增強其效能以及在整個系統中的整合。
-* **Task Manager**: 管理和儲存針對各種財務任務量身定制的不同常規和微調的基於 LLMs 的代理，並定期更新以確保相關性和有效性。
+智慧調度程序對於確保模型多樣性以及優化整合和選擇最適合每項任務的LLM至關重要
+* **Director Agent**: 此協調任務分配過程，確保根據代理人的績效指標和對特定任務的適用性將任務指派給代理人
+* **Agent Registration**: 管理註冊並追蹤系統內代理的可用性，促進高效率的任務分配過程
+* **Agent Adaptor**: 根據特定任務自訂代理功能，增強其效能以及在整個系統中的整合
+* **Task Manager**: 管理和儲存針對各種財務任務量身定制的不同常規和微調的基於 LLMs 的代理，並定期更新以確保相關性和有效性
 
 ## Installation:
 
