@@ -33,6 +33,15 @@
 
 3. **Action**: 執行來自大腦模組的指令，應用工具將分析見解轉化為可行的結果。行動包括交易、投資組合調整、產生報告或發送警報，從而積極影響金融環境
 
+# Financial CoT
+1. **收集初步數據**: 10-K、20-F 報告、市場數據、財務比率
+2. **分析財務報表**: 資產負債表、損益表、現金流量表
+3. **公司概況與績效**: 公司描述、業務亮點、市場分析
+4. **風險評估**: 風險評估
+5. **財務績效視覺化**:  繪製本益比和每股盈餘
+6. **將調查結果綜合成段落**: 將所有部分組合成重點摘要
+7. **產生PDF報告**: 使用工具自動產生PDF
+
 ## FinRobot: Smart Scheduler
 <div align="center">
 <img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/06fa0b78-ac53-48d3-8a6e-98d15386327e" width="60%"/>
@@ -255,15 +264,6 @@ assistant.chat(message, use_cache=True, max_turns=50,
 <img align="center" src="https://github.com/MarkLo127/FinRobot/blob/main/assets/Apple_Annual_Report_2024-1.png" width="60%"/>
 <img align="center" src="https://github.com/MarkLo127/FinRobot/blob/main/assets/Apple_Annual_Report_2024-2.png" width="60%"/>
 </div>
-
-# Financial CoT
-1. **收集初步數據**: 10-K、20-F 報告、市場數據、財務比率
-2. **分析財務報表**: 資產負債表、損益表、現金流量表
-3. **公司概況與績效**: 公司描述、業務亮點、市場分析
-4. **風險評估**: 風險評估
-5. **財務績效視覺化**:  繪製本益比和每股盈餘
-6. **將調查結果綜合成段落**: 將所有部分組合成重點摘要
-7. **產生PDF報告**: 使用工具自動產生PDF
 
 #
 **免責聲明**: 本文提供的程式碼和文件是在 Apache-2.0 許可下發布的。它們不應被視為財務顧問或即時交易建議。在進行任何交易或投資行動之前，必須謹慎行事並諮詢合格的金融專業人士。
