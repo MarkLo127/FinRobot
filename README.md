@@ -85,79 +85,124 @@ add your own openai api-key <your OpenAI API key here>
    - 請參考example資料夾內的內容
 
 ## Demos
-### 1. Market Forecaster Agent (Predict Stock Movements Direction)
-Takes a company's ticker symbol, recent basic financials, and market news as input and predicts its stock movements.
+### 1.市場預測代理（預測股票走勢方向）
+以公司的股票代碼、近期基本財務狀況和市場新聞作為輸入並預測其股票走勢。
 
 1. Import 
 ```python
+import sys
+sys.path.append("/path/FinRobot") #替換成實際路徑位置
+
 import autogen
-from finrobot.utils import get_current_date, register_keys_from_json
-from finrobot.agents.workflow import SingleAssistant
-```
-2. Config
-```python
-# Read OpenAI API keys from a JSON file
-llm_config = {
-    "config_list": autogen.config_list_from_json(
-        "../OAI_CONFIG_LIST",
-        filter_dict={"model": ["gpt-4-0125-preview"]},
-    ),
-    "timeout": 120,
-    "temperature": 0,
-}
-
-# Register FINNHUB API keys
-register_keys_from_json("../config_api_keys")
-```
-3. Run
-```python
-company = "NVDA"
-
-assitant = SingleAssistant(
-    "Market_Analyst",
-    llm_config,
-    # set to "ALWAYS" if you want to chat instead of simply receiving the prediciton
-    human_input_mode="NEVER",
-)
-assitant.chat(
-    f"Use all the tools provided to retrieve information available for {company} upon {get_current_date()}. Analyze the positive developments and potential concerns of {company} "
-    "with 2-4 most important factors respectively and keep them concise. Most factors should be inferred from company related news. "
-    f"Then make a rough prediction (e.g. up/down by 2-3%) of the {company} stock price movement for next week. Provide a summary analysis to support your prediction."
-)
-```
-4. Result
-<div align="center">
-<img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/812ec23a-9cb3-4fad-b716-78533ddcd9dc" width="40%"/>
-<img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/9a2f9f48-b0e1-489c-8679-9a4c530f313c" width="41%"/>
-</div>
-
-### 2. Financial Analyst Agent for Report Writing (Equity Research Report)
-Take a company's 10-k form, financial data, and market data as input and output an equity research report
-
-1. Import 
-```python
-import os
-import autogen
-from textwrap import dedent
-from finrobot.utils import register_keys_from_json
-from finrobot.agents.workflow import SingleAssistantShadow
+from finrobot_zh.utils import get_current_date, register_keys_from_json
+from finrobot_zh.agents.workflow import SingleAssistant
 ```
 2. Config
 ```python
 llm_config = {
     "config_list": autogen.config_list_from_json(
-        "../OAI_CONFIG_LIST",
+        "/path/OAI_CONFIG_LIST", #替換成實際路徑位置
         filter_dict={
-            "model": ["gpt-4-0125-preview"],
+            "model": ["gpt-4o-mini"],
         },
     ),
     "timeout": 120,
     "temperature": 0.5,
 }
-register_keys_from_json("../config_api_keys")
+register_keys_from_json("/path/config_api_keys") #替換成實際路徑位置
+```
+3. Run
+```python
+company = "META"
 
-# Intermediate strategy modules will be saved in this directory
-work_dir = "../report"
+assistant = SingleAssistant(
+    "Market_Analyst",
+    llm_config,
+    # 如果希望進行對話而不僅僅是接收預測，請設置為 "ALWAYS"
+    human_input_mode="NEVER",
+)
+assistant.chat(
+    f"""
+    請使用所有提供的工具，檢索截至{get_current_date()}有關{company}的最新資訊。請從以下幾個方面進行分析：
+
+    1. **正面發展**：列出2至4個與{company}相關的正面因素，這些因素應主要基於公司最新的新聞和公告。
+    2. **潛在風險**：列出2至4個與{company}相關的潛在風險或擔憂，這些因素應包括市場競爭、政策變動或其他可能影響公司表現的因素。
+    3. **市場趨勢分析**：分析當前市場趨勢如何影響{company}，包括行業發展、技術創新等。
+    4. **財務狀況評估**：簡要評估{company}的財務表現，如收入增長、利潤率、現金流等指標。
+
+    最後，根據上述分析，對{company}的股票在下週的走勢做出大致預測（例如，上漲/下跌2-3%），並提供支持該預測的摘要分析。請保持整體分析簡潔明瞭。
+"""
+)
+```
+4. Result
+```python
+--------------------------------------------------------------------------------
+Market_Analyst (to User_Proxy):
+
+### META 最新資訊分析（截至2024-12-22）
+
+#### 1. 正面發展
+- **AI工具推出**：META最近推出了一個新的AI工具，旨在提升合作和機器智能的能力，這顯示了公司在技術創新方面的持續努力，可能會吸引更多客戶和合作夥伴。
+- **市場反彈**：儘管整體市場波動，META的股票在近期內表現良好，顯示出投資者對公司未來增長的信心。
+- **與政策的良好關係**：META的CEO馬克·祖克伯格正在積極與即將上任的特朗普政府建立良好關係，這可能會對公司未來的政策環境產生正面影響。
+
+#### 2. 潛在風險
+- **市場競爭加劇**：META在社交媒體和數字廣告領域面臨來自其他科技巨頭（如Google和Amazon）的激烈競爭，這可能會壓縮其市場份額和利潤。
+- **政策不確定性**：隨著新政府的上任，可能會出現新的監管政策，這對META的運營和盈利能力構成潛在風險。
+- **經濟放緩**：全球經濟增長放緩可能影響廣告支出，進而影響META的收入增長。
+
+#### 3. 市場趨勢分析
+- **數字廣告市場的回暖**：隨著經濟逐漸復甦，數字廣告市場有望回暖，這對META的業務是利好消息。
+- **技術創新**：META在虛擬現實和擴增實境技術上的持續投資，可能會在未來數年內開創新的收入來源。
+- **社交媒體使用趨勢**：隨著年輕一代對社交媒體的持續需求，META有機會在這一領域穩固其市場地位。
+
+#### 4. 財務狀況評估
+- **資產週轉率**：META的資產週轉率顯示出其資源的有效使用，這對於未來的利潤增長是積極信號。
+- **帳面價值**：公司帳面價值的增長表明其資本結構的穩定性，這對投資者來說是個好消息。
+- **收入增長**：儘管面臨挑戰，META的收入仍保持增長，顯示出其業務模式的韌性。
+
+### 股票預測
+基於以上分析，預計META的股票在下週可能會上漲約2-3%。這一預測基於以下幾點：
+- **技術創新和新產品的推出可能會吸引更多的市場關注和投資者信心。**
+- **市場對數字廣告的需求回暖可能會進一步推動META的收入增長。**
+- **雖然存在競爭和政策風險，但公司在管理層的策略和市場定位上顯示出穩定性。**
+
+### 總結
+META在技術創新、財務穩定性和市場需求回暖的背景下，展現出良好的增長潛力，儘管面臨一些外部挑戰，但整體前景依然積極。
+
+TERMINATE
+```
+
+### 2. 金融分析師代理報告撰寫（股票研究報告）
+以公司的10-k、20-F、財務數據和市場數據作為輸入並輸出股權研究報告
+
+1. Import 
+```python
+import sys
+sys.path.append("/path/FinRobot") #替換成實際路徑位置
+
+import os
+import autogen
+from textwrap import dedent
+from finrobot_zh.utils import register_keys_from_json
+from finrobot_zh.agents.workflow import SingleAssistantShadow
+```
+2. Config
+```python
+llm_config = {
+    "config_list": autogen.config_list_from_json(
+        "/path/OAI_CONFIG_LIST", #替換成實際路徑位置
+        filter_dict={
+            "model": ["gpt-4o"],
+        },
+    ),
+    "timeout": 120,
+    "temperature": 0.5,
+}
+register_keys_from_json("/Users/yaolo/Desktop/FinRobot/config_api_keys") #替換成實際路徑位置
+
+# Intermediate results will be saved in this directory
+work_dir = "/path/report" #替換成實際路徑位置
 os.makedirs(work_dir, exist_ok=True)
 
 assistant = SingleAssistantShadow(
@@ -166,32 +211,49 @@ assistant = SingleAssistantShadow(
     max_consecutive_auto_reply=None,
     human_input_mode="TERMINATE",
 )
-
 ```
 3. Run
 ```python
-company = "Microsoft"
-fyear = "2023"
-
+company = "APPLE"
+fyear = "2024"
 message = dedent(
     f"""
-    With the tools you've been provided, write an annual report based on {company}'s {fyear} 10-k report, format it into a pdf.
-    Pay attention to the followings:
-    - Explicitly explain your working plan before you kick off.
-    - Use tools one by one for clarity, especially when asking for instructions. 
-    - All your file operations should be done in "{work_dir}". 
-    - Display any image in the chat once generated.
-    - All the paragraphs should combine between 400 and 450 words, don't generate the pdf until this is explicitly fulfilled.
-"""
-)
+        請根據 {company} 在 {fyear} 年的 10-K 報告資料，撰寫年度報告並將其最終以 PDF 格式呈現。請詳細閱讀並遵守下列要求與執行計劃：
 
+        1. 工作計劃聲明：
+        - 在正式開始生成報告內容前，請先以清晰、邏輯且逐步的方式解釋您的整體工作計劃，包括如何取得、分析與彙整 10-K 報告中的資訊。
+        - 說明您將使用的工具，以及每個工具的用途與目的。
+
+        2. 工具使用流程說明：
+        - 在整個任務過程中，請務必在每次使用工具時先進行充分解釋與請求指令描述。例如，當您需要存取檔案、執行文字處理或格式轉換時，請在對話中明確說明您的計劃與目的。
+        - 在對話中請一律使用繁體中存進行回覆。
+        - 一旦獲得許可後再使用工具，並在操作完成後彙報結果。
+
+        3. 工作目錄規範：
+        - 所有檔案處理、文字儲存與文件生成必須在 "{work_dir}" 目錄中進行。
+        - 請在操作前後清楚標示工作目錄路徑與行為，使操作可追溯且透明化。
+
+        4. 圖像顯示要求：
+        - 在生成任何圖像後，請立即於對話中進行顯示（例如可將圖像以內嵌方式傳回或描述生成的圖像內容與檔案位置）。
+。
+        5. 段落字數規定：
+        - 第一頁（業務概覽、市場地位和營運結果）的每個段落應在 150 到 160 字之間，第二頁（風險評估和競爭對手分析）的每個段落應在 500 到 600 字之間。
+        - 請在完全確認所有內容敲定、且經最終檢視無誤後，再生成 PDF 檔案，以避免反覆更改。
+
+        6. 最終 PDF 輸出：
+        - 完成文本初稿、審閱與確認後，再進行 PDF 檔案的格式化與輸出，確保文件結構、字數規範與語氣專業性皆符合要求。
+        - 在生成 PDF 前，請先於對話中明確聲明「將進行 PDF 輸出」並等待確認，確認後再執行最終生成動作。
+
+        請依序遵照上述指令，以高專業度與清晰可辨的程序，協助完成 10-K 年度報告的撰寫與 PDF 格式輸出。
+    """
+    )
 assistant.chat(message, use_cache=True, max_turns=50,
                summary_method="last_msg")
 ```
 4. Result
 <div align="center">
-<img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/d2d999e0-dc0e-4196-aca1-218f5fadcc5b" width="60%"/>
-<img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/3a21873f-9498-4d73-896b-3740bf6d116d" width="60%"/>
+<img align="center" src="https://github.com/MarkLo127/FinRobot/blob/main/example/report/Apple_Annual_Report_2024.pdf" width="60%"/>
+<img align="center" src="https://github.com/MarkLo127/FinRobot/blob/main/example/report/Apple_Annual_Report_2024.pdf" width="60%"/>
 </div>
 
 # Financial CoT
