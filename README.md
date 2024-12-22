@@ -84,6 +84,8 @@ add your own openai api-key <your OpenAI API key here>
 3. **使用範例**
    - 請參考example資料夾內的內容
 
+# Usage
+
 # Financial CoT
 1. **收集初步數據**: 10-K、20-F 報告、市場數據、財務比率
 2. **分析財務報表**: 資產負債表、損益表、現金流量表
