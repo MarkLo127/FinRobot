@@ -79,7 +79,6 @@ add your own openai api-key <your OpenAI API key here>
 ```
 
 ## finrobot_zh
-
 本專案以 [AI4Finance 基金會的 FinRobot](https://github.com/AI4Finance-Foundation/FinRobot) 為基礎，進行功能強化與本地化，特別針對繁體中文使用者進行了優化，並新增了對 20-F 財務文件的支援。
 
 功能增強與特色
@@ -263,6 +262,33 @@ assistant.chat(message, use_cache=True, max_turns=50,
   <img src="https://github.com/MarkLo127/FinRobot/blob/main/assets/Apple_Annual_Report_2024-1.png" style="width: 45%;" />
   <img src="https://github.com/MarkLo127/FinRobot/blob/main/assets/Apple_Annual_Report_2024-2.png" style="width: 45%;" />
 </div>
+
+## 引用
+
+本專案基於 [AI4Finance-Foundation/FinRobot](https://github.com/AI4Finance-Foundation/FinRobot) 開發。如果使用本專案，請引用以下文獻：
+
+@inproceedings{
+  zhou2024finrobot,
+  title={FinRobot: {AI} Agent for Equity Research and Valuation with Large Language Models},
+  author={Tianyu Zhou and Pinqiao Wang and Yilin Wu and Hongyang Yang},
+  booktitle={ICAIF 2024: The 1st Workshop on Large Language Models and Generative AI for Finance},
+  year={2024}
+}
+
+@article{yang2024finrobot,
+  title={FinRobot: An Open-Source AI Agent Platform for Financial Applications using Large Language Models},
+  author={Yang, Hongyang and Zhang, Boyu and Wang, Neng and Guo, Cheng and Zhang, Xiaoli and Lin, Likun and Wang, Junlin and Zhou, Tianyu and Guan, Mao and Zhang, Runjia and others},
+  journal={arXiv preprint arXiv:2405.14767},
+  year={2024}
+}
+
+@inproceedings{han2024enhancing,
+  title={Enhancing Investment Analysis: Optimizing AI-Agent Collaboration in Financial Research},
+  author={Han, Xuewen and Wang, Neng and Che, Shangkun and Yang, Hongyang and Zhang, Kunpeng and Xu, Sean Xin},
+  booktitle={ICAIF 2024: Proceedings of the 5th ACM International Conference on AI in Finance},
+  pages={538--546},
+  year={2024}
+}
 
 ##
 **免責聲明**: 本文提供的程式碼和文件是在 Apache-2.0 許可下發布的。它們不應被視為財務顧問或即時交易建議。在進行任何交易或投資行動之前，必須謹慎行事並諮詢合格的金融專業人士。
