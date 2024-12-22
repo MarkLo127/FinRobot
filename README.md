@@ -42,7 +42,7 @@
 6. **將調查結果綜合成段落**: 將所有部分組合成重點摘要
 7. **產生PDF報告**: 使用工具自動產生PDF
 
-## FinRobot: Smart Scheduler
+# FinRobot: Smart Scheduler
 <div align="center">
 <img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/06fa0b78-ac53-48d3-8a6e-98d15386327e" width="60%"/>
 </div>
