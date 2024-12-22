@@ -47,9 +47,8 @@
 <img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/06fa0b78-ac53-48d3-8a6e-98d15386327e" width="60%"/>
 </div>
 
-智慧調度程序對於確保模型多樣性以及優化整合和選擇最適合每項任務的LLM至關重要
-* **Director Agent**: 此協調任務分配過程，確保根據代理人的績效指標和對特定任務的適用性將任務指派給代理人
-* **Agent Registration**: 管理註冊並追蹤系統內代理的可用性，促進高效率的任務分配過程
+* **Director Agent**: 協調任務分配，根據代理人的績效指標和對特定任務的適用性將任務指派給代理人
+* **Agent Registration**: 管理並追蹤系統內代理的可用性，促進高效率的任務分配過程
 * **Agent Adaptor**: 根據特定任務自訂代理功能，增強其效能以及在整個系統中的整合
 * **Task Manager**: 管理和儲存針對各種財務任務量身定制的不同常規和微調的基於 LLMs 的代理，並定期更新以確保相關性和有效性
 
