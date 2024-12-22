@@ -1,4 +1,5 @@
 pyautogen==0.4.1
+flaml[automl]
 openai
 ipython
 huggingface_hub

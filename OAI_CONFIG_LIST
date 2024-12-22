@@ -1,15 +1,20 @@
 [
     {
         "model": "gpt-4o-mini",
-        "api_key": "<your OpenAI API key here>"
+        "api_key": "<your OpenAI API key here>",
+        "base_url":"<base_url>",
+        "default_headers" : {"x-foo": "true"}
     },
     {
         "model": "gpt-4o",
-        "api_key": "<your OpenAI API key here>"
+        "api_key": "<your OpenAI API key here>",
+        "base_url":"<base_url>",
+        "default_headers" : {"x-foo": "true"}
     },
     {
         "model": "gpt-4-vision-preview",
-        "api_key": "<your OpenAI API key here>"
+        "api_key": "<your OpenAI API key here>",
+        "base_url":"<base_url>",
+        "default_headers" : {"x-foo": "true"} 
     }
 ]
-
