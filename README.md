@@ -62,14 +62,12 @@ pip install -r requirements.txt
 ```
 **4.修改OAI_CONFIG_LIST_sample**
 ```shell
-1) rename OAI_CONFIG_LIST_sample to OAI_CONFIG_LIST
-2) remove the four lines of comment within the OAI_CONFIG_LIST file
-3) add your own openai api-key <your OpenAI API key here>
+add your own openai api-key <your OpenAI API key here>
 ```
 **5.修改config_api_keys_sample**
 ```shell
-1) add your own finnhub-api "YOUR_FINNHUB_API_KEY"
-2) add your own financialmodelingprep and sec-api keys "YOUR_FMP_API_KEY" and "YOUR_SEC_API_KEY" (for financial report generation)
+1. add your own finnhub-api "YOUR_FINNHUB_API_KEY"
+2. add your own financialmodelingprep and sec-api keys "YOUR_FMP_API_KEY" and "YOUR_SEC_API_KEY" (for financial report generation)
 ```
 
 # finrobot_zh
