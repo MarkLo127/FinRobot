@@ -199,7 +199,7 @@ llm_config = {
     "timeout": 120,
     "temperature": 0.5,
 }
-register_keys_from_json("/Users/yaolo/Desktop/FinRobot/config_api_keys") #替換成實際路徑位置
+register_keys_from_json("/path/config_api_keys") #替換成實際路徑位置
 
 # Intermediate results will be saved in this directory
 work_dir = "/path/report" #替換成實際路徑位置
@@ -252,8 +252,7 @@ assistant.chat(message, use_cache=True, max_turns=50,
 ```
 4. Result
 <div align="center">
-<img align="center" src="https://github.com/MarkLo127/FinRobot/blob/main/example/report/Apple_Annual_Report_2024.pdf" width="60%"/>
-<img align="center" src="https://github.com/MarkLo127/FinRobot/blob/main/example/report/Apple_Annual_Report_2024.pdf" width="60%"/>
+  <img align="center" src="https://github.com/MarkLo127/FinRobot/blob/main/example/report/Apple_Annual_Report_2024.pdf" width="60%" />
 </div>
 
 # Financial CoT
