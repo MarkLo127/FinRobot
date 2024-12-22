@@ -93,7 +93,7 @@ add your own openai api-key <your OpenAI API key here>
 
 ## Demos
 ### 1.市場預測代理（預測股票走勢方向）
-以公司的股票代碼、近期基本財務狀況和市場新聞作為輸入並預測其股票走勢。
+以公司的股票代碼、近期基本財務狀況和市場新聞作為輸入並預測其股票走勢
 
 1. Import 
 ```python
