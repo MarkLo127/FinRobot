@@ -15,12 +15,21 @@
 <img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/6b30d9c1-35e5-4d36-a138-7e2769718f62" width="90%"/>
 </div>
 
-### FinRobot 的整體框架分為四個不同的層，每個層都旨在解決金融人工智慧處理和應用的特定方面:
+## FinRobot 的整體框架分為四個不同的層，每個層都旨在解決金融人工智慧處理和應用的特定方面:
 
 1. **Financial AI Agents Layer**: 金融 AI 代理層利用金融思維鏈（CoT），將複雜金融問題分解為邏輯步驟。市場預測、文件分析和交易策略代理結合先進演算法與專業知識，適應市場動態，提供精準且可操作的見解
 2. **Financial LLMs Algorithms Layer**: 金融LLMs演算法層配置和利用針對特定領域和全球市場分析專門調整的模型
 3. **LLMOps and DataOps Layers**: LLMOps 層實作多源整合策略，利用一系列最先進的模式為特定財務任務選擇最適合的 LLMs
 4. **Multi-source LLM Foundation Models Layer**: 支援各種通用和專用LLMs的即插即用功能
+
+## Financial CoT
+1. **收集初步數據**: 10-K、20-F 報告、市場數據、財務比率
+2. **分析財務報表**: 資產負債表、損益表、現金流量表
+3. **公司概況與績效**: 公司描述、業務亮點、市場分析
+4. **風險評估**: 風險評估
+5. **財務績效視覺化**:  繪製本益比和每股盈餘
+6. **將調查結果綜合成段落**: 將所有部分組合成重點摘要
+7. **產生PDF報告**: 使用工具自動產生PDF
 
 ## FinRobot: Agent Workflow
 <div align="center">
@@ -33,16 +42,7 @@
 
 3. **Action**: 執行來自大腦模組的指令，應用工具將分析見解轉化為可行的結果。行動包括交易、投資組合調整、產生報告或發送警報，從而積極影響金融環境
 
-# Financial CoT
-1. **收集初步數據**: 10-K、20-F 報告、市場數據、財務比率
-2. **分析財務報表**: 資產負債表、損益表、現金流量表
-3. **公司概況與績效**: 公司描述、業務亮點、市場分析
-4. **風險評估**: 風險評估
-5. **財務績效視覺化**:  繪製本益比和每股盈餘
-6. **將調查結果綜合成段落**: 將所有部分組合成重點摘要
-7. **產生PDF報告**: 使用工具自動產生PDF
-
-# FinRobot: Smart Scheduler
+## FinRobot: Smart Scheduler
 <div align="center">
 <img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/06fa0b78-ac53-48d3-8a6e-98d15386327e" width="60%"/>
 </div>
@@ -79,7 +79,7 @@ add your own openai api-key <your OpenAI API key here>
 2. add your own financialmodelingprep and sec-api keys "YOUR_FMP_API_KEY" and "YOUR_SEC_API_KEY" (for financial report generation)
 ```
 
-# finrobot_zh
+## finrobot_zh
 
 本專案以 [AI4Finance 基金會的 FinRobot](https://github.com/AI4Finance-Foundation/FinRobot) 為基礎，進行功能強化與本地化，特別針對繁體中文使用者進行了優化，並新增了對 20-F 財務文件的支援。
 
@@ -265,5 +265,5 @@ assistant.chat(message, use_cache=True, max_turns=50,
   <img src="https://github.com/MarkLo127/FinRobot/blob/main/assets/Apple_Annual_Report_2024-2.png" style="width: 45%;" />
 </div>
 
-#
+##
 **免責聲明**: 本文提供的程式碼和文件是在 Apache-2.0 許可下發布的。它們不應被視為財務顧問或即時交易建議。在進行任何交易或投資行動之前，必須謹慎行事並諮詢合格的金融專業人士。
