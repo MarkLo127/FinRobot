@@ -6,7 +6,7 @@
 <div align="center">
 </div>
 
-**FinRobot**:開源 AI 代理平台，專為金融應用設計的全方位解決方案，並且整合了多種 AI 技術，滿足金融行業多方面的需求
+**FinRobot**:開源 AI 代理平台，專為金融應用設計的全方位解決方案，整合多種 AI 技術，滿足金融行業多方面的需求
 
 **AI Agent**：使用大型語言模型作為大腦來感知環境、做出決策和執行行動，與傳統人工智慧不同的地方在於AI Agent 具有獨立思考和利用工具逐步實現既定目標的能力
 
@@ -17,7 +17,7 @@
 
 ## Framework
 
-1. **Financial AI Agents Layer**: 利用金融思維鏈（CoT），將複雜金融問題分解為邏輯步驟。市場預測、文件分析和交易策略代理結合先進演算法與專業知識，適應市場動態，提供精準且可操作的見解
+1. **Financial AI Agents Layer**: 透過金融思維鏈（CoT），將複雜的金融問題分解為清晰的邏輯步驟，並且結合市場預測、文件分析及交易策略代理，運用先進演算法與專業知識，有效適應市場動態，提供精準且具實用性的洞察與建議
 2. **Financial LLMs Algorithms Layer**: 配置和利用針對特定領域和全球市場分析專門調整的模型
 3. **LLMOps and DataOps Layers**: 實作多源整合策略，利用一系列最先進的模式為特定財務任務選擇最適合的 LLMs
 4. **Multi-source LLM Foundation Models Layer**: 支援各種通用和專用LLMs的即插即用功能
