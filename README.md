@@ -79,7 +79,7 @@ add your own openai api-key <your OpenAI API key here>
 ```
 
 ## finrobot_zh
-本專案以 [AI4Finance 基金會的 FinRobot](https://github.com/AI4Finance-Foundation/FinRobot) 為基礎，進行功能強化與本地化，特別針對繁體中文使用者進行了優化，並新增了對 20-F 財務文件的支援。
+本專案以 [AI4Finance 基金會的 FinRobot](https://github.com/AI4Finance-Foundation/FinRobot) 為基礎，進行功能強化與本地化，特別針對繁體中文使用者進行了優化，並新增了對 20-F 財務文件的支援
 
 功能增強與特色
 1. **20-F 支援**  
