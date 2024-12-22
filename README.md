@@ -68,10 +68,8 @@ pip install -r requirements.txt
 ```
 **5.修改config_api_keys_sample**
 ```shell
-1) rename config_api_keys_sample to config_api_keys
-2) remove the comment within the config_api_keys file
-3) add your own finnhub-api "YOUR_FINNHUB_API_KEY"
-4) add your own financialmodelingprep and sec-api keys "YOUR_FMP_API_KEY" and "YOUR_SEC_API_KEY" (for financial report generation)
+1) add your own finnhub-api "YOUR_FINNHUB_API_KEY"
+2) add your own financialmodelingprep and sec-api keys "YOUR_FMP_API_KEY" and "YOUR_SEC_API_KEY" (for financial report generation)
 ```
 
 # finrobot_zh
