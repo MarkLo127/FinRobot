@@ -252,7 +252,9 @@ assistant.chat(message, use_cache=True, max_turns=50,
 ```
 4. Result
 <div align="center">
-  <img align="center" src="https://github.com/MarkLo127/FinRobot/blob/main/example/report/Apple_Annual_Report_2024.pdf" width="60%" />
+  <a href="https://github.com/MarkLo127/FinRobot/blob/main/example/report/Apple_Annual_Report_2024.pdf">
+    <img align="center" src="https://github.com/MarkLo127/FinRobot/blob/main/example/report/example_preview_image.png" width="60%" />
+  </a>
 </div>
 
 # Financial CoT
