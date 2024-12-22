@@ -10,7 +10,7 @@
 
 **AI Agent**：使用大型語言模型作為大腦來感知環境、做出決策和執行行動，與傳統人工智慧不同的地方在於AI Agent 具有獨立思考和利用工具逐步實現既定目標的能力
 
-## FinRobot Ecosystem
+## Ecosystem
 <div align="center">
 <img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/6b30d9c1-35e5-4d36-a138-7e2769718f62" width="90%"/>
 </div>
@@ -31,7 +31,7 @@
 6. **將調查結果綜合成段落**: 將所有部分組合成重點摘要
 7. **產生PDF報告**: 使用工具自動產生PDF
 
-## FinRobot: Agent Workflow
+## Agent Workflow
 <div align="center">
 <img align="center" src="https://github.com/AI4Finance-Foundation/FinRobot/assets/31713746/ff8033be-2326-424a-ac11-17e2c9c4983d" width="60%"/>
 </div>
