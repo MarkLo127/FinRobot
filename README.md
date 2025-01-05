@@ -16,7 +16,6 @@
 </div>
 
 ## Framework
-
 1. **Financial AI Agents Layer**: 透過金融思維鏈（CoT），將複雜的金融問題分解為清晰的邏輯步驟，並且結合市場預測、文件分析及交易策略代理，運用先進演算法與專業知識，有效適應市場動態，提供精準且具實用性的洞察與建議
 2. **Financial LLMs Algorithms Layer**: 配置和利用針對特定領域和全球市場分析專門調整的模型
 3. **LLMOps and DataOps Layers**: 實作多源整合策略，利用一系列最先進的模式為特定財務任務選擇最適合的 LLMs
@@ -40,7 +39,7 @@
 
 2. **Brain**: 核心處理單元，透過LLMs感知來自感知模組的數據，並利用金融思想鏈（CoT）流程產生結構化指令
 
-3. **Action**: 執行來自大腦模組的指令，應用工具將分析見解轉化為可行的結果。行動包括交易、投資組合調整、產生報告或發送警報，從而積極影響金融環境
+3. **Action**: 執行來自大腦模組的指令，應用工具將分析見解轉化為可行的結果。包括交易、投資組合調整、產生報告或發送警報
 
 ## Smart Scheduler
 <div align="center">
@@ -68,11 +67,11 @@ cd FinRobot
 ```shell
 pip install -r requirements.txt
 ```
-**4.修改OAI_CONFIG_LIST_sample**
+**4.修改OAI_CONFIG_LIST**
 ```shell
 add your own openai api-key <your OpenAI API key here>
 ```
-**5.修改config_api_keys_sample**
+**5.修改config_api_keys**
 ```shell
 1. add your own finnhub-api "YOUR_FINNHUB_API_KEY"
 2. add your own financialmodelingprep and sec-api keys "YOUR_FMP_API_KEY" and "YOUR_SEC_API_KEY" (for financial report generation)
