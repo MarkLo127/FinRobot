@@ -3,11 +3,18 @@ import mplfinance as mpf
 import pandas as pd
 
 from matplotlib import pyplot as plt
+from matplotlib.font_manager import fontManager
 from typing import Annotated, List, Tuple
 from pandas import DateOffset
 from datetime import datetime, timedelta
 
 from ..data_source.yfinance_utils import YFinanceUtils
+
+# 設定中文字體
+font_path = os.path.join(os.path.dirname(__file__), 'LXGW_WenKai_TC,Noto_Serif_TC', 'Noto_Serif_TC', 'static', 'NotoSerifTC-Regular.ttf')
+fontManager.addfont(font_path)
+plt.rcParams['font.family'] = 'Noto Serif TC'
+plt.rcParams['axes.unicode_minus'] = False  # 解決負號顯示問題
 
 
 class MplFinanceUtils:

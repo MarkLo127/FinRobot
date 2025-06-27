@@ -19,10 +19,17 @@ from reportlab.platypus import (
 from reportlab.lib.units import inch
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 from ..data_source import FMPUtils, YFinanceUtils
 from .analyzer import ReportAnalysisUtils
 from typing import Annotated
+
+# 註冊字體
+font_path = os.path.join(os.path.dirname(__file__), 'LXGW_WenKai_TC,Noto_Serif_TC', 'Noto_Serif_TC', 'static')
+pdfmetrics.registerFont(TTFont('NotoSerifTC', os.path.join(font_path, 'NotoSerifTC-Regular.ttf')))
+pdfmetrics.registerFont(TTFont('NotoSerifTC-Bold', os.path.join(font_path, 'NotoSerifTC-Bold.ttf')))
 
 
 class ReportLabUtils:
@@ -71,7 +78,7 @@ class ReportLabUtils:
                 ParagraphStyle(
                     name="Justify",
                     alignment=TA_JUSTIFY,
-                    fontName="Helvetica",
+                    fontName="NotoSerifTC",
                     fontSize=10,
                 )
             )
@@ -79,7 +86,7 @@ class ReportLabUtils:
                 ParagraphStyle(
                     name="Title",
                     alignment=TA_CENTER,
-                    fontName="Helvetica-Bold",
+                    fontName="NotoSerifTC-Bold",
                     fontSize=18,
                 )
             )
@@ -87,7 +94,7 @@ class ReportLabUtils:
                 ParagraphStyle(
                     name="Subtitle",
                     alignment=TA_LEFT,
-                    fontName="Helvetica-Bold",
+                    fontName="NotoSerifTC-Bold",
                     fontSize=14,
                 )
             )
@@ -123,7 +130,7 @@ class ReportLabUtils:
                         ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
                         ("TEXTCOLOR", (0, 0), (0, -1), colors.black),
                         ("ALIGN", (0, 0), (-1, -1), "LEFT"),
-                        ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
+                        ("FONTNAME", (0, 0), (-1, -1), "NotoSerifTC"),
                         ("FONTSIZE", (0, 0), (-1, -1), 10),
                         ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
                         ("TOPPADDING", (0, 0), (-1, -1), 6),
