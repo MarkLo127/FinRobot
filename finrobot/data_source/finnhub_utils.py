@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import finnhub
 import pandas as pd
@@ -16,12 +17,12 @@ def init_finnhub_client(func):
         global finnhub_client
         if os.environ.get("FINNHUB_API_KEY") is None:
             print(
-                "Please set the environment variable FINNHUB_API_KEY to use the Finnhub API."
+                "請設定環境變數 FINNHUB_API_KEY 以使用 Finnhub API。"
             )
             return None
         else:
             finnhub_client = finnhub.Client(api_key=os.environ["FINNHUB_API_KEY"])
-            print("Finnhub client initialized")
+            print("Finnhub 客戶端已初始化")
             return func(*args, **kwargs)
 
     # wrapper.__annotations__ = func.__annotations__
@@ -31,47 +32,46 @@ def init_finnhub_client(func):
 @decorate_all_methods(init_finnhub_client)
 class FinnHubUtils:
 
-    def get_company_profile(symbol: Annotated[str, "ticker symbol"]) -> str:
+    def get_company_profile(symbol: Annotated[str, "股票代碼"]) -> str:
         """
-        get a company's profile information
+        取得公司的基本資料資訊
         """
         profile = finnhub_client.company_profile2(symbol=symbol)
         if not profile:
-            return f"Failed to find company profile for symbol {symbol} from finnhub!"
+            return f"無法從 finnhub 找到股票代碼 {symbol} 的公司資料！"
 
         formatted_str = (
-            "[Company Introduction]:\n\n{name} is a leading entity in the {finnhubIndustry} sector. "
-            "Incorporated and publicly traded since {ipo}, the company has established its reputation as "
-            "one of the key players in the market. As of today, {name} has a market capitalization "
-            "of {marketCapitalization:.2f} in {currency}, with {shareOutstanding:.2f} shares outstanding."
-            "\n\n{name} operates primarily in the {country}, trading under the ticker {ticker} on the {exchange}. "
-            "As a dominant force in the {finnhubIndustry} space, the company continues to innovate and drive "
-            "progress within the industry."
+            "[公司介紹]：\n\n{name} 是 {finnhubIndustry} 行業的領先企業。"
+            "自 {ipo} 年成立並公開上市以來，該公司已確立其作為市場主要參與者之一的聲譽。"
+            "截至今日，{name} 的市值為 {marketCapitalization:.2f} {currency}，"
+            "流通股數為 {shareOutstanding:.2f} 股。"
+            "\n\n{name} 主要在 {country} 營運，在 {exchange} 交易所以股票代碼 {ticker} 交易。"
+            "作為 {finnhubIndustry} 領域的主導力量，該公司持續創新並推動行業進步。"
         ).format(**profile)
 
         return formatted_str
 
     def get_company_news(
-        symbol: Annotated[str, "ticker symbol"],
+        symbol: Annotated[str, "股票代碼"],
         start_date: Annotated[
             str,
-            "start date of the search period for the company's basic financials, yyyy-mm-dd",
+            "搜尋公司基本財務資料的起始日期，格式：yyyy-mm-dd",
         ],
         end_date: Annotated[
             str,
-            "end date of the search period for the company's basic financials, yyyy-mm-dd",
+            "搜尋公司基本財務資料的結束日期，格式：yyyy-mm-dd",
         ],
         max_news_num: Annotated[
-            int, "maximum number of news to return, default to 10"
+            int, "返回新聞的最大數量，預設為 10"
         ] = 10,
         save_path: SavePathType = None,
     ) -> pd.DataFrame:
         """
-        retrieve market news related to designated company
+        檢索與指定公司相關的市場新聞
         """
         news = finnhub_client.company_news(symbol, _from=start_date, to=end_date)
         if len(news) == 0:
-            print(f"No company news found for symbol {symbol} from finnhub!")
+            print(f"無法從 finnhub 找到股票代碼 {symbol} 的公司新聞！")
         news = [
             {
                 "date": datetime.fromtimestamp(n["datetime"]).strftime("%Y%m%d%H%M%S"),
@@ -80,42 +80,42 @@ class FinnHubUtils:
             }
             for n in news
         ]
-        # Randomly select a subset of news if the number of news exceeds the maximum
+        # 如果新聞數量超過最大值，隨機選擇子集
         if len(news) > max_news_num:
             news = random.choices(news, k=max_news_num)
         news.sort(key=lambda x: x["date"])
         output = pd.DataFrame(news)
-        save_output(output, f"company news of {symbol}", save_path=save_path)
+        save_output(output, f"{symbol} 的公司新聞", save_path=save_path)
 
         return output
 
     def get_basic_financials_history(
-        symbol: Annotated[str, "ticker symbol"],
+        symbol: Annotated[str, "股票代碼"],
         freq: Annotated[
             str,
-            "reporting frequency of the company's basic financials: annual / quarterly",
+            "公司基本財務資料的報告頻率：annual（年度）/ quarterly（季度）",
         ],
         start_date: Annotated[
             str,
-            "start date of the search period for the company's basic financials, yyyy-mm-dd",
+            "搜尋公司基本財務資料的起始日期，格式：yyyy-mm-dd",
         ],
         end_date: Annotated[
             str,
-            "end date of the search period for the company's basic financials, yyyy-mm-dd",
+            "搜尋公司基本財務資料的結束日期，格式：yyyy-mm-dd",
         ],
         selected_columns: Annotated[
             list[str] | None,
-            "List of column names of news to return, should be chosen from 'assetTurnoverTTM', 'bookValue', 'cashRatio', 'currentRatio', 'ebitPerShare', 'eps', 'ev', 'fcfMargin', 'fcfPerShareTTM', 'grossMargin', 'inventoryTurnoverTTM', 'longtermDebtTotalAsset', 'longtermDebtTotalCapital', 'longtermDebtTotalEquity', 'netDebtToTotalCapital', 'netDebtToTotalEquity', 'netMargin', 'operatingMargin', 'payoutRatioTTM', 'pb', 'peTTM', 'pfcfTTM', 'pretaxMargin', 'psTTM', 'ptbv', 'quickRatio', 'receivablesTurnoverTTM', 'roaTTM', 'roeTTM', 'roicTTM', 'rotcTTM', 'salesPerShare', 'sgaToSale', 'tangibleBookValue', 'totalDebtToEquity', 'totalDebtToTotalAsset', 'totalDebtToTotalCapital', 'totalRatio'",
+            "要返回的新聞欄位名稱列表，應從以下選項中選擇：'assetTurnoverTTM', 'bookValue', 'cashRatio', 'currentRatio', 'ebitPerShare', 'eps', 'ev', 'fcfMargin', 'fcfPerShareTTM', 'grossMargin', 'inventoryTurnoverTTM', 'longtermDebtTotalAsset', 'longtermDebtTotalCapital', 'longtermDebtTotalEquity', 'netDebtToTotalCapital', 'netDebtToTotalEquity', 'netMargin', 'operatingMargin', 'payoutRatioTTM', 'pb', 'peTTM', 'pfcfTTM', 'pretaxMargin', 'psTTM', 'ptbv', 'quickRatio', 'receivable"
         ] = None,
         save_path: SavePathType = None,
     ) -> pd.DataFrame:
 
         if freq not in ["annual", "quarterly"]:
-            return f"Invalid reporting frequency {freq}. Please specify either 'annual' or 'quarterly'."
+            return f"無效的報告頻率 {freq}。請指定 'annual'（年度）或 'quarterly'（季度）。"
 
         basic_financials = finnhub_client.company_basic_financials(symbol, "all")
         if not basic_financials["series"]:
-            return f"Failed to find basic financials for symbol {symbol} from finnhub! Try a different symbol."
+            return f"無法從 finnhub 找到股票代碼 {symbol} 的基本財務資料！請嘗試不同的股票代碼。"
 
         output_dict = defaultdict(dict)
         for metric, value_list in basic_financials["series"][freq].items():
@@ -127,23 +127,23 @@ class FinnHubUtils:
 
         financials_output = pd.DataFrame(output_dict)
         financials_output = financials_output.rename_axis(index="date")
-        save_output(financials_output, "basic financials", save_path=save_path)
+        save_output(financials_output, "基本財務資料", save_path=save_path)
 
         return financials_output
 
     def get_basic_financials(
-        symbol: Annotated[str, "ticker symbol"],
+        symbol: Annotated[str, "股票代碼"],
         selected_columns: Annotated[
             list[str] | None,
-            "List of column names of news to return, should be chosen from 'assetTurnoverTTM', 'bookValue', 'cashRatio', 'currentRatio', 'ebitPerShare', 'eps', 'ev', 'fcfMargin', 'fcfPerShareTTM', 'grossMargin', 'inventoryTurnoverTTM', 'longtermDebtTotalAsset', 'longtermDebtTotalCapital', 'longtermDebtTotalEquity', 'netDebtToTotalCapital', 'netDebtToTotalEquity', 'netMargin', 'operatingMargin', 'payoutRatioTTM', 'pb', 'peTTM', 'pfcfTTM', 'pretaxMargin', 'psTTM', 'ptbv', 'quickRatio', 'receivablesTurnoverTTM', 'roaTTM', 'roeTTM', 'roicTTM', 'rotcTTM', 'salesPerShare', 'sgaToSale', 'tangibleBookValue', 'totalDebtToEquity', 'totalDebtToTotalAsset', 'totalDebtToTotalCapital', 'totalRatio','10DayAverageTradingVolume', '13WeekPriceReturnDaily', '26WeekPriceReturnDaily', '3MonthADReturnStd', '3MonthAverageTradingVolume', '52WeekHigh', '52WeekHighDate', '52WeekLow', '52WeekLowDate', '52WeekPriceReturnDaily', '5DayPriceReturnDaily', 'assetTurnoverAnnual', 'assetTurnoverTTM', 'beta', 'bookValuePerShareAnnual', 'bookValuePerShareQuarterly', 'bookValueShareGrowth5Y', 'capexCagr5Y', 'cashFlowPerShareAnnual', 'cashFlowPerShareQuarterly', 'cashFlowPerShareTTM', 'cashPerSharePerShareAnnual', 'cashPerSharePerShareQuarterly', 'currentDividendYieldTTM', 'currentEv/freeCashFlowAnnual', 'currentEv/freeCashFlowTTM', 'currentRatioAnnual', 'currentRatioQuarterly', 'dividendGrowthRate5Y', 'dividendPerShareAnnual', 'dividendPerShareTTM', 'dividendYieldIndicatedAnnual', 'ebitdPerShareAnnual', 'ebitdPerShareTTM', 'ebitdaCagr5Y', 'ebitdaInterimCagr5Y', 'enterpriseValue', 'epsAnnual', 'epsBasicExclExtraItemsAnnual', 'epsBasicExclExtraItemsTTM', 'epsExclExtraItemsAnnual', 'epsExclExtraItemsTTM', 'epsGrowth3Y', 'epsGrowth5Y', 'epsGrowthQuarterlyYoy', 'epsGrowthTTMYoy', 'epsInclExtraItemsAnnual', 'epsInclExtraItemsTTM', 'epsNormalizedAnnual', 'epsTTM', 'focfCagr5Y', 'grossMargin5Y', 'grossMarginAnnual', 'grossMarginTTM', 'inventoryTurnoverAnnual', 'inventoryTurnoverTTM', 'longTermDebt/equityAnnual', 'longTermDebt/equityQuarterly', 'marketCapitalization', 'monthToDatePriceReturnDaily', 'netIncomeEmployeeAnnual', 'netIncomeEmployeeTTM', 'netInterestCoverageAnnual', 'netInterestCoverageTTM', 'netMarginGrowth5Y', 'netProfitMargin5Y', 'netProfitMarginAnnual', 'netProfitMarginTTM', 'operatingMargin5Y', 'operatingMarginAnnual', 'operatingMarginTTM', 'payoutRatioAnnual', 'payoutRatioTTM', 'pbAnnual', 'pbQuarterly', 'pcfShareAnnual', 'pcfShareTTM', 'peAnnual', 'peBasicExclExtraTTM', 'peExclExtraAnnual', 'peExclExtraTTM', 'peInclExtraTTM', 'peNormalizedAnnual', 'peTTM', 'pfcfShareAnnual', 'pfcfShareTTM', 'pretaxMargin5Y', 'pretaxMarginAnnual', 'pretaxMarginTTM', 'priceRelativeToS&P50013Week', 'priceRelativeToS&P50026Week', 'priceRelativeToS&P5004Week', 'priceRelativeToS&P50052Week', 'priceRelativeToS&P500Ytd', 'psAnnual', 'psTTM', 'ptbvAnnual', 'ptbvQuarterly', 'quickRatioAnnual', 'quickRatioQuarterly', 'receivablesTurnoverAnnual', 'receivablesTurnoverTTM', 'revenueEmployeeAnnual', 'revenueEmployeeTTM', 'revenueGrowth3Y', 'revenueGrowth5Y', 'revenueGrowthQuarterlyYoy', 'revenueGrowthTTMYoy', 'revenuePerShareAnnual', 'revenuePerShareTTM', 'revenueShareGrowth5Y', 'roa5Y', 'roaRfy', 'roaTTM', 'roe5Y', 'roeRfy', 'roeTTM', 'roi5Y', 'roiAnnual', 'roiTTM', 'tangibleBookValuePerShareAnnual', 'tangibleBookValuePerShareQuarterly', 'tbvCagr5Y', 'totalDebt/totalEquityAnnual', 'totalDebt/totalEquityQuarterly', 'yearToDatePriceReturnDaily'",
+            "要返回的新聞欄位名稱列表，應從以下選項中選擇：'assetTurnoverTTM', 'bookValue', 'cashRatio', 'currentRatio', 'ebitPerShare', 'eps', 'ev', 'fcfMargin', 'fcfPerShareTTM', 'grossMargin', 'inventoryTurnoverTTM', 'longtermDebtTotalAsset', 'longtermDebtTotalCapital', 'longtermDebtTotalEquity', 'netDebtToTotalCapital', 'netDebtToTotalEquity', 'netMargin', 'operatingMargin', 'payoutRatioTTM', 'pb', 'peTTM', 'pfcfTTM', 'pretaxMargin', 'psTTM', 'ptbv', 'quickRatio', 'receivable"
         ] = None,
     ) -> str:
         """
-        get latest basic financials for a designated company
+        取得指定公司的最新基本財務資料
         """
         basic_financials = finnhub_client.company_basic_financials(symbol, "all")
         if not basic_financials["series"]:
-            return f"Failed to find basic financials for symbol {symbol} from finnhub! Try a different symbol."
+            return f"無法從 finnhub 找到股票代碼 {symbol} 的基本財務資料！請嘗試不同的股票代碼。"
 
         output_dict = basic_financials["metric"]
         for metric, value_list in basic_financials["series"]["quarterly"].items():

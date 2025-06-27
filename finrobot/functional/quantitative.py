@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import json
 import importlib
@@ -13,7 +14,7 @@ from IPython import get_ipython
 class DeployedCapitalAnalyzer(bt.Analyzer):
     def start(self):
         self.deployed_capital = []
-        self.initial_cash = self.strategy.broker.get_cash()  # Initial cash in account
+        self.initial_cash = self.strategy.broker.get_cash()  # 帳戶初始現金
 
     def notify_order(self, order):
         if order.status in [order.Completed]:
@@ -39,47 +40,47 @@ class BackTraderUtils:
 
     def back_test(
         ticker_symbol: Annotated[
-            str, "Ticker symbol of the stock (e.g., 'AAPL' for Apple)"
+            str, "股票代碼（例如：'AAPL' 代表蘋果公司）"
         ],
         start_date: Annotated[
-            str, "Start date of the historical data in 'YYYY-MM-DD' format"
+            str, "歷史數據的開始日期，格式為 'YYYY-MM-DD'"
         ],
         end_date: Annotated[
-            str, "End date of the historical data in 'YYYY-MM-DD' format"
+            str, "歷史數據的結束日期，格式為 'YYYY-MM-DD'"
         ],
         strategy: Annotated[
             str,
-            "BackTrader Strategy class to be backtested. Can be pre-defined or custom. Pre-defined options: 'SMA_CrossOver'. If custom, provide module path and class name as a string like 'my_module:TestStrategy'.",
+            "要回測的 BackTrader 策略類別。可以是預定義的或自定義的。預定義選項：'SMA_CrossOver'。如果是自定義的，請提供模組路徑和類別名稱，格式如 'my_module:TestStrategy'。",
         ],
         strategy_params: Annotated[
             str,
-            "Additional parameters to be passed to the strategy class formatted as json string. E.g. {'fast': 10, 'slow': 30} for SMACross.",
+            "傳遞給策略類別的額外參數，格式為 JSON 字串。例如：{'fast': 10, 'slow': 30} 用於 SMACross。",
         ] = "",
         sizer: Annotated[
             int | str | None,
-            "Sizer used for backtesting. Can be a fixed number or a custom Sizer class. If input is integer, a corresponding fixed sizer will be applied. If custom, provide module path and class name as a string like 'my_module:TestSizer'.",
+            "用於回測的倉位管理器。可以是固定數字或自定義 Sizer 類別。如果輸入是整數，將應用相應的固定倉位管理器。如果是自定義的，請提供模組路徑和類別名稱，格式如 'my_module:TestSizer'。",
         ] = None,
         sizer_params: Annotated[
             str,
-            "Additional parameters to be passed to the sizer class formatted as json string.",
+            "傳遞給倉位管理器類別的額外參數，格式為 JSON 字串。",
         ] = "",
         indicator: Annotated[
             str | None,
-            "Custom indicator class added to strategy. Provide module path and class name as a string like 'my_module:TestIndicator'.",
+            "添加到策略的自定義指標類別。請提供模組路徑和類別名稱，格式如 'my_module:TestIndicator'。",
         ] = None,
         indicator_params: Annotated[
             str,
-            "Additional parameters to be passed to the indicator class formatted as json string.",
+            "傳遞給指標類別的額外參數，格式為 JSON 字串。",
         ] = "",
         cash: Annotated[
-            float, "Initial cash amount for the backtest. Default to 10000.0"
+            float, "回測的初始現金金額。預設為 10000.0"
         ] = 10000.0,
         save_fig: Annotated[
-            str | None, "Path to save the plot of backtest results. Default to None."
+            str | None, "儲存回測結果圖表的路徑。預設為 None。"
         ] = None,
     ) -> str:
         """
-        Use the Backtrader library to backtest a trading strategy on historical stock data.
+        使用 Backtrader 函式庫對歷史股票數據進行交易策略回測。
         """
         cerebro = bt.Cerebro()
 
@@ -88,7 +89,7 @@ class BackTraderUtils:
         else:
             assert (
                 ":" in strategy
-            ), "Custom strategy should be module path and class name separated by a colon."
+            ), "自定義策略應該是模組路徑和類別名稱，用冒號分隔。"
             module_path, class_name = strategy.split(":")
             module = importlib.import_module(module_path)
             strategy_class = getattr(module, class_name)
@@ -96,62 +97,58 @@ class BackTraderUtils:
         strategy_params = json.loads(strategy_params) if strategy_params else {}
         cerebro.addstrategy(strategy_class, **strategy_params)
 
-        # Create a data feed
+        # 創建數據源
         data = bt.feeds.PandasData(
             dataname=yf.download(ticker_symbol, start_date, end_date, auto_adjust=True)
         )
-        cerebro.adddata(data)  # Add the data feed
-        # Set our desired cash start
+        cerebro.adddata(data)  # 添加數據源
+        # 設定初始現金
         cerebro.broker.setcash(cash)
 
-        # Set the size of the trades
+        # 設定交易規模
         if sizer is not None:
             if isinstance(sizer, int):
                 cerebro.addsizer(bt.sizers.FixedSize, stake=sizer)
             else:
                 assert (
                     ":" in sizer
-                ), "Custom sizer should be module path and class name separated by a colon."
+                ), "自定義倉位管理器應該是模組路徑和類別名稱，用冒號分隔。"
                 module_path, class_name = sizer.split(":")
                 module = importlib.import_module(module_path)
                 sizer_class = getattr(module, class_name)
                 sizer_params = json.loads(sizer_params) if sizer_params else {}
                 cerebro.addsizer(sizer_class, **sizer_params)
 
-        # Set additional indicator
+        # 設定額外指標
         if indicator is not None:
             assert (
                 ":" in indicator
-            ), "Custom indicator should be module path and class name separated by a colon."
+            ), "自定義指標應該是模組路徑和類別名稱，用冒號分隔。"
             module_path, class_name = indicator.split(":")
             module = importlib.import_module(module_path)
             indicator_class = getattr(module, class_name)
             indicator_params = json.loads(indicator_params) if indicator_params else {}
             cerebro.addindicator(indicator_class, **indicator_params)
 
-        # Attach analyzers
+        # 附加分析器
         cerebro.addanalyzer(bt.analyzers.SharpeRatio, _name="sharpe_ratio")
         cerebro.addanalyzer(bt.analyzers.DrawDown, _name="draw_down")
         cerebro.addanalyzer(bt.analyzers.Returns, _name="returns")
         cerebro.addanalyzer(bt.analyzers.TradeAnalyzer, _name="trade_analyzer")
-        # cerebro.addanalyzer(DeployedCapitalAnalyzer, _name="deployed_capital")
 
-        stats_dict = {"Starting Portfolio Value:": cerebro.broker.getvalue()}
+        stats_dict = {"起始投資組合價值：": cerebro.broker.getvalue()}
 
-        results = cerebro.run()  # run it all
+        results = cerebro.run()  # 執行回測
         first_strategy = results[0]
 
-        # Access analysis results
-        stats_dict["Final Portfolio Value"] = cerebro.broker.getvalue()
-        # stats_dict["Deployed Capital"] = pformat(
-        #     first_strategy.analyzers.deployed_capital.get_analysis(), indent=4
-        # )
-        stats_dict["Sharpe Ratio"] = (
+        # 存取分析結果
+        stats_dict["最終投資組合價值"] = cerebro.broker.getvalue()
+        stats_dict["夏普比率"] = (
             first_strategy.analyzers.sharpe_ratio.get_analysis()
         )
-        stats_dict["Drawdown"] = first_strategy.analyzers.draw_down.get_analysis()
-        stats_dict["Returns"] = first_strategy.analyzers.returns.get_analysis()
-        stats_dict["Trade Analysis"] = (
+        stats_dict["回撤"] = first_strategy.analyzers.draw_down.get_analysis()
+        stats_dict["報酬率"] = first_strategy.analyzers.returns.get_analysis()
+        stats_dict["交易分析"] = (
             first_strategy.analyzers.trade_analyzer.get_analysis()
         )
 
@@ -164,17 +161,14 @@ class BackTraderUtils:
             plt.savefig(save_fig)
             plt.close()
 
-        return "Back Test Finished. Results: \n" + pformat(stats_dict, indent=2)
+        return "回測完成。結果：\n" + pformat(stats_dict, indent=2)
 
 
 if __name__ == "__main__":
-    # Example usage:
+    # 使用範例：
     start_date = "2011-01-01"
     end_date = "2012-12-31"
     ticker = "MSFT"
-    # BackTraderUtils.back_test(
-    #     ticker, start_date, end_date, "SMA_CrossOver", {"fast": 10, "slow": 30}
-    # )
     BackTraderUtils.back_test(
         ticker,
         start_date,

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from finrobot.data_source.earnings_calls_src import get_earnings_all_docs
 from finrobot.data_source.filings_src import sec_main as unstructured_sec_main
 from finrobot.data_source.marker_sec_src.sec_filings_to_pdf import sec_save_pdfs
@@ -20,7 +21,7 @@ def get_data(
         vram_per_task:Optional[int] = None,
         num_chunks:int = 1,
 ):
-    assert data_source in ['unstructured','earnings_calls','marker_pdf'], "The valid data sources are ['unstructured','earnings_calls','marker_pdf']"
+    assert data_source in ['unstructured','earnings_calls','marker_pdf'], "有效的資料來源為 ['unstructured','earnings_calls','marker_pdf']"
     
     if 'marker_pdf' in data_source:
         # subprocess.run(["ls", "-l"])
@@ -32,7 +33,7 @@ def get_data(
             ticker, year, filing_types, include_amends
         )
         if not batch_processing:
-            assert batch_multiplier is not None, "The batch multiplier is not specified"
+            assert batch_multiplier is not None, "未指定批次乘數"
             run_marker_single(
             input_ticker_year_path=input_ticker_year_path,
             output_ticker_year_path=output_ticker_year_path,
@@ -48,7 +49,7 @@ def get_data(
                 num_chunks=num_chunks,
                 vram_per_task=vram_per_task,
             )
-        print(f"Files have been saved successfully. Check in the folder {output_ticker_year_path}")
+        print(f"檔案已成功儲存。請檢查資料夾 {output_ticker_year_path}")
     elif 'unstructured' in data_source:
         sec_data,sec_form_names = unstructured_sec_main(ticker,year,filing_types,include_amends)
         return sec_data,sec_form_names
@@ -62,5 +63,3 @@ def get_data(
             speakers_list_3,
             speakers_list_4,
         )
-
-

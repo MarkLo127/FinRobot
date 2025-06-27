@@ -1,18 +1,19 @@
+# -*- coding: utf-8 -*-
 import re
 from .prompts import order_template
 
 
 def instruction_trigger(sender):
-    # Check if the last message contains the path to the instruction text file
-    return "instruction & resources saved to" in sender.last_message()["content"]
+    # 檢查最後一條訊息是否包含指令文字檔案的路徑
+    return "指令與資源已儲存至" in sender.last_message()["content"]
 
 
 def instruction_message(recipient, messages, sender, config):
-    # Extract the path to the instruction text file from the last message
+    # 從最後一條訊息中提取指令文字檔案的路徑
     full_order = recipient.chat_messages_for_summary(sender)[-1]["content"]
-    txt_path = full_order.replace("instruction & resources saved to ", "").strip()
+    txt_path = full_order.replace("指令與資源已儲存至 ", "").strip()
     with open(txt_path, "r") as f:
-        instruction = f.read() + "\n\nReply TERMINATE at the end of your response."
+        instruction = f.read() + "\n\n在回應結尾回覆 TERMINATE。"
     return instruction
 
 
