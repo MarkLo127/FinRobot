@@ -4,6 +4,7 @@ import pandas as pd
 
 from matplotlib import pyplot as plt
 from matplotlib.font_manager import fontManager
+from matplotlib.font_manager import FontProperties as font
 from typing import Annotated, List, Tuple
 from pandas import DateOffset
 from datetime import datetime, timedelta
@@ -11,21 +12,11 @@ from datetime import datetime, timedelta
 from ..data_source.yfinance_utils import YFinanceUtils
 
 # 設定中文字體
-font_dir = os.path.join(os.path.dirname(__file__), 'LXGW_WenKai_TC,Noto_Serif_TC')
-
-# 註冊 Noto Serif TC 字體
-noto_serif_tc_path = os.path.join(font_dir, 'Noto_Serif_TC', 'static')
-fontManager.addfont(os.path.join(noto_serif_tc_path, 'NotoSerifTC-Regular.ttf'))
-fontManager.addfont(os.path.join(noto_serif_tc_path, 'NotoSerifTC-Bold.ttf'))
-
-# 註冊 LXGW WenKai TC 字體
-lxgw_wenkai_tc_path = os.path.join(font_dir, 'LXGW_WenKai_TC')
-fontManager.addfont(os.path.join(lxgw_wenkai_tc_path, 'LXGWWenKaiTC-Regular.ttf'))
-fontManager.addfont(os.path.join(lxgw_wenkai_tc_path, 'LXGWWenKaiTC-Bold.ttf'))
-
-# 設置預設字體，可以根據需要更改為 'LXGW WenKai TC'
+font_path = os.path.join(os.path.dirname(__file__), 'LXGW_WenKai_TC,Noto_Serif_TC', 'Noto_Serif_TC', 'static', 'NotoSerifTC-Regular.ttf')
+fontManager.addfont(font_path)
 plt.rcParams['font.family'] = 'Noto Serif TC'
 plt.rcParams['axes.unicode_minus'] = False  # 解決負號顯示問題
+
 
 
 class MplFinanceUtils:
@@ -139,9 +130,9 @@ class ReportChartUtils:
         )
 
         # 設置標題和標籤
-        plt.title(f'{info["shortName"]} 與標普500 - 過去一年變化百分比')
-        plt.xlabel("日期")
-        plt.ylabel("變化百分比")
+        plt.title(f'{info["shortName"]} 與標普500 - 過去一年變化百分比', fontproperties=font1)
+        plt.xlabel("日期", fontproperties=font1)
+        plt.ylabel("變化百分比", fontproperties=font1)
 
         # 設置x軸刻度標籤
         plt.xticks(
@@ -214,21 +205,21 @@ class ReportChartUtils:
 
         # 繪製本益比
         color = "tab:blue"
-        ax1.set_xlabel("日期")
-        ax1.set_ylabel("本益比", color=color)
+        ax1.set_xlabel("日期", fontproperties=font1)
+        ax1.set_ylabel("本益比", color=color, fontproperties=font1)
         ax1.plot(dates, pe, color=color)
-        ax1.tick_params(axis="y", labelcolor=color)
+        ax1.tick_params(axis="y", labelcolor=color, fontproperties=font1)
         ax1.grid(True)
 
         # 創建與ax1共享x軸的第二個軸對象
         ax2 = ax1.twinx()
         color = "tab:red"
-        ax2.set_ylabel("每股盈餘", color=color)  # 第二個y軸的標籤
+        ax2.set_ylabel("每股盈餘", color=color, fontproperties=font1)  # 第二個y軸的標籤
         ax2.plot(dates, eps, color=color)
         ax2.tick_params(axis="y", labelcolor=color)
 
         # 設置標題和x軸標籤角度
-        plt.title(f'{info["shortName"]} 過去 {years} 年的本益比和每股盈餘')
+        plt.title(f'{info["shortName"]} 過去 {years} 年的本益比和每股盈餘', fontproperties=font1)
         plt.xticks(rotation=45)
 
         # 設置x軸刻度標籤
