@@ -27,9 +27,17 @@ from .analyzer import ReportAnalysisUtils
 from typing import Annotated
 
 # 註冊字體
-font_path = os.path.join(os.path.dirname(__file__), 'LXGW_WenKai_TC,Noto_Serif_TC', 'Noto_Serif_TC', 'static')
-pdfmetrics.registerFont(TTFont('NotoSerifTC', os.path.join(font_path, 'NotoSerifTC-Regular.ttf')))
-pdfmetrics.registerFont(TTFont('NotoSerifTC-Bold', os.path.join(font_path, 'NotoSerifTC-Bold.ttf')))
+font_dir = os.path.join(os.path.dirname(__file__), 'LXGW_WenKai_TC,Noto_Serif_TC')
+
+# 註冊 Noto Serif TC 字體
+noto_serif_tc_path = os.path.join(font_dir, 'Noto_Serif_TC', 'static')
+pdfmetrics.registerFont(TTFont('NotoSerifTC-Regular', os.path.join(noto_serif_tc_path, 'NotoSerifTC-Regular.ttf')))
+pdfmetrics.registerFont(TTFont('NotoSerifTC-Bold', os.path.join(noto_serif_tc_path, 'NotoSerifTC-Bold.ttf')))
+
+# 註冊 LXGW WenKai TC 字體
+lxgw_wenkai_tc_path = os.path.join(font_dir, 'LXGW_WenKai_TC')
+pdfmetrics.registerFont(TTFont('LXGWWenKaiTC-Regular', os.path.join(lxgw_wenkai_tc_path, 'LXGWWenKaiTC-Regular.ttf')))
+pdfmetrics.registerFont(TTFont('LXGWWenKaiTC-Bold', os.path.join(lxgw_wenkai_tc_path, 'LXGWWenKaiTC-Bold.ttf')))
 
 
 class ReportLabUtils:
@@ -78,7 +86,7 @@ class ReportLabUtils:
                 ParagraphStyle(
                     name="Justify",
                     alignment=TA_JUSTIFY,
-                    fontName="NotoSerifTC",
+                    fontName="NotoSerifTC-Regular",
                     fontSize=10,
                 )
             )
@@ -130,7 +138,7 @@ class ReportLabUtils:
                         ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
                         ("TEXTCOLOR", (0, 0), (0, -1), colors.black),
                         ("ALIGN", (0, 0), (-1, -1), "LEFT"),
-                        ("FONTNAME", (0, 0), (-1, -1), "NotoSerifTC"),
+                        ("FONTNAME", (0, 0), (-1, -1), "NotoSerifTC-Regular"),
                         ("FONTSIZE", (0, 0), (-1, -1), 10),
                         ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
                         ("TOPPADDING", (0, 0), (-1, -1), 6),

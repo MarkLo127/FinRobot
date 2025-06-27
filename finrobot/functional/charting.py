@@ -11,8 +11,19 @@ from datetime import datetime, timedelta
 from ..data_source.yfinance_utils import YFinanceUtils
 
 # 設定中文字體
-font_path = os.path.join(os.path.dirname(__file__), 'LXGW_WenKai_TC,Noto_Serif_TC', 'Noto_Serif_TC', 'static', 'NotoSerifTC-Regular.ttf')
-fontManager.addfont(font_path)
+font_dir = os.path.join(os.path.dirname(__file__), 'LXGW_WenKai_TC,Noto_Serif_TC')
+
+# 註冊 Noto Serif TC 字體
+noto_serif_tc_path = os.path.join(font_dir, 'Noto_Serif_TC', 'static')
+fontManager.addfont(os.path.join(noto_serif_tc_path, 'NotoSerifTC-Regular.ttf'))
+fontManager.addfont(os.path.join(noto_serif_tc_path, 'NotoSerifTC-Bold.ttf'))
+
+# 註冊 LXGW WenKai TC 字體
+lxgw_wenkai_tc_path = os.path.join(font_dir, 'LXGW_WenKai_TC')
+fontManager.addfont(os.path.join(lxgw_wenkai_tc_path, 'LXGWWenKaiTC-Regular.ttf'))
+fontManager.addfont(os.path.join(lxgw_wenkai_tc_path, 'LXGWWenKaiTC-Bold.ttf'))
+
+# 設置預設字體，可以根據需要更改為 'LXGW WenKai TC'
 plt.rcParams['font.family'] = 'Noto Serif TC'
 plt.rcParams['axes.unicode_minus'] = False  # 解決負號顯示問題
 
