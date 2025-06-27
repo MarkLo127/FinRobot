@@ -7,9 +7,9 @@ default_path = "coding/"
 
 class IPythonUtils:
 
-    def exec_python(cell: Annotated[str, "Valid Python cell to execute."]) -> str:
+    def exec_python(cell: Annotated[str, "要執行的 Python 程式碼。"]) -> str:
         """
-        run cell in ipython and return the execution result.
+        在 IPython 中執行程式碼並返回執行結果。
         """
         ipython = get_ipython()
         result = ipython.run_cell(cell)
@@ -21,32 +21,32 @@ class IPythonUtils:
         return log
 
     def display_image(
-        image_path: Annotated[str, "Path to image file to display."]
+        image_path: Annotated[str, "要顯示的圖片檔案路徑。"]
     ) -> str:
         """
-        Display image in Jupyter Notebook.
+        在 Jupyter Notebook 中顯示圖片。
         """
         log = __class__.exec_python(
             f"from IPython.display import Image, display\n\ndisplay(Image(filename='{image_path}'))"
         )
         if not log:
-            return "Image displayed successfully"
+            return "圖片顯示成功"
         else:
             return log
 
 
-class CodingUtils:  # Borrowed from https://microsoft.github.io/autogen/docs/notebooks/agentchat_function_call_code_writing
+class CodingUtils:
 
-    def list_dir(directory: Annotated[str, "Directory to check."]) -> str:
+    def list_dir(directory: Annotated[str, "要檢查的目錄。"]) -> str:
         """
-        List files in choosen directory.
+        列出指定目錄中的檔案。
         """
         files = os.listdir(default_path + directory)
         return str(files)
 
-    def see_file(filename: Annotated[str, "Name and path of file to check."]) -> str:
+    def see_file(filename: Annotated[str, "要檢查的檔案名稱和路徑。"]) -> str:
         """
-        Check the contents of a chosen file.
+        檢查指定檔案的內容。
         """
         with open(default_path + filename, "r") as file:
             lines = file.readlines()
@@ -56,16 +56,16 @@ class CodingUtils:  # Borrowed from https://microsoft.github.io/autogen/docs/not
         return file_contents
 
     def modify_code(
-        filename: Annotated[str, "Name and path of file to change."],
-        start_line: Annotated[int, "Start line number to replace with new code."],
-        end_line: Annotated[int, "End line number to replace with new code."],
+        filename: Annotated[str, "要修改的檔案名稱和路徑。"],
+        start_line: Annotated[int, "要替換的起始行號。"],
+        end_line: Annotated[int, "要替換的結束行號。"],
         new_code: Annotated[
             str,
-            "New piece of code to replace old code with. Remember about providing indents.",
+            "用於替換的新程式碼。請注意提供正確的縮排。",
         ],
     ) -> str:
         """
-        Replace old piece of code with new one. Proper indentation is important.
+        用新程式碼替換舊程式碼。正確的縮排很重要。
         """
         with open(default_path + filename, "r+") as file:
             file_contents = file.readlines()
@@ -73,17 +73,17 @@ class CodingUtils:  # Borrowed from https://microsoft.github.io/autogen/docs/not
             file.seek(0)
             file.truncate()
             file.write("".join(file_contents))
-        return "Code modified"
+        return "程式碼已修改"
 
     def create_file_with_code(
-        filename: Annotated[str, "Name and path of file to create."],
-        code: Annotated[str, "Code to write in the file."],
+        filename: Annotated[str, "要創建的檔案名稱和路徑。"],
+        code: Annotated[str, "要寫入檔案的程式碼。"],
     ) -> str:
         """
-        Create a new file with provided code.
+        使用提供的程式碼創建新檔案。
         """
         directory = os.path.dirname(default_path + filename)
         os.makedirs(directory, exist_ok=True)
         with open(default_path + filename, "w") as file:
             file.write(code)
-        return "File created successfully"
+        return "檔案創建成功"

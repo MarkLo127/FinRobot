@@ -5,9 +5,9 @@ from datetime import date, timedelta, datetime
 from typing import Annotated
 
 
-# Define custom annotated types
-# VerboseType = Annotated[bool, "Whether to print data to console. Default to True."]
-SavePathType = Annotated[str, "File path to save data. If None, data is not saved."]
+# 定義自定義註解類型
+# VerboseType = Annotated[bool, "是否將數據輸出到控制台。預設為 True。"]
+SavePathType = Annotated[str, "儲存數據的檔案路徑。如果為 None，則不儲存數據。"]
 
 
 # def process_output(data: pd.DataFrame, tag: str, verbose: VerboseType = True, save_path: SavePathType = None) -> None:
@@ -21,7 +21,7 @@ SavePathType = Annotated[str, "File path to save data. If None, data is not save
 def save_output(data: pd.DataFrame, tag: str, save_path: SavePathType = None) -> None:
     if save_path:
         data.to_csv(save_path)
-        print(f"{tag} saved to {save_path}")
+        print(f"{tag} 已儲存至 {save_path}")
 
 
 def get_current_date():
@@ -46,7 +46,6 @@ def decorate_all_methods(decorator):
 
 
 def get_next_weekday(date):
-
     if not isinstance(date, datetime):
         date = datetime.strptime(date, "%Y-%m-%d")
 
