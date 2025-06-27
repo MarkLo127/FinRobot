@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from typing import List
 import asyncio
 import aiohttp
@@ -43,7 +44,7 @@ DEFAULT_AFTER_DATE = date(2000, 1, 1).strftime(DATE_FORMAT_TOKENS)
 
 
 class timeout:
-    def __init__(self, seconds=1, error_message="Timeout"):
+    def __init__(self, seconds=1, error_message="超時"):
         self.seconds = seconds
         self.error_message = error_message
 
@@ -51,64 +52,48 @@ class timeout:
         raise TimeoutError(self.error_message)
 
     def __enter__(self):
-        try:
-            signal.signal(signal.SIGALRM, self.handle_timeout)
-            signal.alarm(self.seconds)
-        except ValueError:
-            pass
+        signal.signal(signal.SIGALRM, self.handle_timeout)
+        signal.alarm(self.seconds)
 
     def __exit__(self, type, value, traceback):
-        try:
-            signal.alarm(0)
-        except ValueError:
-            pass
+        signal.alarm(0)
 
 
-# pipeline-api
 def get_regex_enum(section_regex):
-    """Get sections using regular expression
-
-    Args:
-        section_regex (str): regular expression for the section name
-
-    Returns:
-        CustomSECSection.CUSTOM: Custom regex section name
-    """
-
-    class CustomSECSection(Enum):
-        CUSTOM = re.compile(section_regex)
-
-        @property
-        def pattern(self):
-            return self.value
-
-    return CustomSECSection.CUSTOM
+    """將章節正則表達式轉換為枚舉"""
+    return section_string_to_enum(section_regex)
 
 
 class SECExtractor:
-    def __init__(self, ticker: str, sections: List[str] = ["_ALL"]):
-        """_summary_
+    """SEC 文件提取器類別"""
 
-        Args:
-            tickers (List[str]): list of ticker
-            amount (int): amount of documenteds
-            filing_type (str): 10-K or 10-Q
-            start_date (str, optional): start date of getting files. Defaults to DEFAULT_AFTER_DATE.
-            end_date (str, optional): end date of getting files. Defaults to DEFAULT_BEFORE_DATE.
-            sections (List[str], optional): sections required, check sections names. Defaults to ["_ALL"].
+    def __init__(
+        self,
+        ticker: str,
+        filing_type: str = "10-K",
+        sections: List[str] = ["BUSINESS", "RISK_FACTORS", "MANAGEMENT_DISCUSSION"],
+    ):
         """
-
+        初始化 SEC 提取器
+        
+        參數：
+            ticker (str): 股票代碼
+            filing_type (str): 申報類型
+            sections (List[str]): 要提取的章節列表
+        """
+        self.filing_type = filing_type
         self.ticker = ticker
         self.sections = sections
 
     def get_year(self, filing_details: str) -> str:
-        """Get the year for 10-K and year,month for 10-Q
+        """
+        獲取 10-K 的年份和 10-Q 的年份、月份
 
-        Args:
-            filing_details (str): filing url
+        參數：
+            filing_details (str): 申報 URL
 
-        Returns:
-            str: year for 10-K and year,month for 10-Q
+        返回：
+            str: 10-K 的年份和 10-Q 的年份、月份
         """
         details = filing_details.split("/")[-1]
         if self.filing_type == "10-K":
@@ -117,19 +102,20 @@ class SECExtractor:
             matches = re.findall("20\d{4}", details)
 
         if matches:
-            return matches[-1]  # Return the first match
+            return matches[-1]  # 返回第一個匹配
         else:
-            return None  # In case no match is found
+            return None  # 如果沒有找到匹配
 
     def get_all_text(self, section, all_narratives):
-        """Join all the text from a section
+        """
+        連接章節中的所有文本
 
-        Args:
-            section (str): section name
-            all_narratives (dict): dictionary of section names and text
+        參數：
+            section (str): 章節名稱
+            all_narratives (dict): 章節名稱和文本的字典
 
-        Returns:
-            _type_: _description_
+        返回：
+            str: 連接後的文本
         """
         all_texts = []
         for text_dict in all_narratives[section]:
@@ -139,69 +125,42 @@ class SECExtractor:
         return " ".join(all_texts)
 
     def get_section_texts_from_text(self, text):
-        """Get the text from filing document URL
+        """
+        從申報文件文本中獲取文本
 
-        Args:
-            url (str): url link
+        參數：
+            text (str): 文件文本
 
-        Returns:
-            _type_: all texts of sections and filing type of the document
+        返回：
+            tuple: 所有章節的文本和文件的申報類型
         """
         all_narratives, filing_type = self.pipeline_api(text, m_section=self.sections)
-        all_narrative_dict = dict.fromkeys(all_narratives.keys())
+        section_texts = {}
+        for section in self.sections:
+            if section in all_narratives:
+                section_texts[section] = self.get_all_text(section, all_narratives)
+        return section_texts
 
-        for section in all_narratives:
-            all_narrative_dict[section] = self.get_all_text(section, all_narratives)
-
-        # return all_narrative_dict, filing_type
-        return all_narrative_dict
-
-    def pipeline_api(self, text, m_section=[], m_section_regex=[]):
-        """Unsturcured API to get the text
-
-        Args:
-            text (str): Text from the filing document URL
-            m_section (list, optional): Section required. Defaults to [].
-            m_section_regex (list, optional): Custom Section required using regex . Defaults to [].
-
-        Raises:
-            ValueError: Invalid document names
-            ValueError: Invalid section names
-
-        Returns:
-                section and correspoding texts
+    def pipeline_api(self, text, m_section):
         """
-        validate_section_names(m_section)
+        處理 SEC 文件的管道 API
 
-        sec_document = SECDocument.from_string(text)
-        if sec_document.filing_type not in VALID_FILING_TYPES:
-            raise ValueError(
-                f"SEC document filing type {sec_document.filing_type} is not supported, "
-                f"must be one of {','.join(VALID_FILING_TYPES)}"
-            )
+        參數：
+            text (str): 文件文本
+            m_section (List[str]): 要提取的章節列表
+
+        返回：
+            tuple: 章節敘述和申報類型
+        """
+        sec_document = SECDocument.from_text(text)
         results = {}
-        if m_section == [ALL_SECTIONS]:
-            filing_type = sec_document.filing_type
-            if filing_type in REPORT_TYPES:
-                if filing_type.startswith("10-K"):
-                    m_section = [enum.name for enum in SECTIONS_10K]
-                elif filing_type.startswith("10-Q"):
-                    m_section = [enum.name for enum in SECTIONS_10Q]
-                else:
-                    raise ValueError(f"Invalid report type: {filing_type}")
-
-            else:
-                m_section = [enum.name for enum in SECTIONS_S1]
-        for section in m_section:
-            results[section] = sec_document.get_section_narrative(
-                section_string_to_enum[section]
-            )
-
-        for i, section_regex in enumerate(m_section_regex):
+        
+        for i, section_regex in enumerate(m_section):
             regex_num = get_regex_enum(section_regex)
             with timeout(seconds=5):
                 section_elements = sec_document.get_section_narrative(regex_num)
                 results[f"REGEX_{i}"] = section_elements
+        
         return {
             section: convert_to_isd(section_narrative)
             for section, section_narrative in results.items()
@@ -210,9 +169,10 @@ class SECExtractor:
     @sleep_and_retry
     @limits(calls=10, period=1)
     def get_filing(self, url: str, company: str, email: str) -> str:
-        """Fetches the specified filing from the SEC EDGAR Archives. Conforms to the rate
-        limits specified on the SEC website.
-        ref: https://www.sec.gov/os/accessing-edgar-data"""
+        """
+        從 SEC EDGAR 檔案庫獲取指定的申報文件。符合 SEC 網站上指定的速率限制。
+        參考：https://www.sec.gov/os/accessing-edgar-data
+        """
         session = self._get_session(company, email)
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
@@ -224,15 +184,16 @@ class SECExtractor:
     def _get_session(
         self, company: Optional[str] = None, email: Optional[str] = None
     ) -> requests.Session:
-        """Creates a requests sessions with the appropriate headers set. If these headers are not
-        set, SEC will reject your request.
-        ref: https://www.sec.gov/os/accessing-edgar-data"""
+        """
+        創建具有適當標頭設定的請求會話。如果未設定這些標頭，SEC 將拒絕您的請求。
+        參考：https://www.sec.gov/os/accessing-edgar-data
+        """
         if company is None:
             company = os.environ.get("SEC_API_ORGANIZATION")
         if email is None:
             email = os.environ.get("SEC_API_EMAIL")
-        assert company
-        assert email
+        assert company, "需要公司名稱"
+        assert email, "需要電子郵件地址"
         session = requests.Session()
         session.headers.update(
             {

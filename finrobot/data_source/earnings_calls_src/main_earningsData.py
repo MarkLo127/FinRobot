@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from finrobot.data_source.earnings_calls_src.earningsData import get_earnings_transcript
 import re
 from langchain.schema import Document
@@ -53,38 +54,38 @@ def get_earnings_all_quarters_data(quarter: str, ticker: str, year: int):
 def get_earnings_all_docs(ticker: str, year: int):
     earnings_docs = []
     earnings_call_quarter_vals = []
-    print("Earnings Call Q1")
+    print("財報電話會議 Q1")
     try:
         docs, speakers_list_1 = get_earnings_all_quarters_data("Q1", ticker, year)
         earnings_call_quarter_vals.append("Q1")
         earnings_docs.extend(docs)
     except RetryError:
-        print(f"Don't have the data for Q1")
+        print(f"沒有 Q1 的數據")
         speakers_list_1 = []
 
-    print("Earnings Call Q2")
+    print("財報電話會議 Q2")
     try:
         docs, speakers_list_2 = get_earnings_all_quarters_data("Q2", ticker, year)
         earnings_call_quarter_vals.append("Q2")
         earnings_docs.extend(docs)
     except RetryError:
-        print(f"Don't have the data for Q2")
+        print(f"沒有 Q2 的數據")
         speakers_list_2 = []
-    print("Earnings Call Q3")
+    print("財報電話會議 Q3")
     try:
         docs, speakers_list_3 = get_earnings_all_quarters_data("Q3", ticker, year)
         earnings_call_quarter_vals.append("Q3")
         earnings_docs.extend(docs)
     except RetryError:
-        print(f"Don't have the data for Q3")
+        print(f"沒有 Q3 的數據")
         speakers_list_3 = []
-    print("Earnings Call Q4")
+    print("財報電話會議 Q4")
     try:
         docs, speakers_list_4 = get_earnings_all_quarters_data("Q4", ticker, year)
         earnings_call_quarter_vals.append("Q4")
         earnings_docs.extend(docs)
     except RetryError:
-        print(f"Don't have the data for Q4")
+        print(f"沒有 Q4 的數據")
         speakers_list_4 = []
     return (
         earnings_docs,

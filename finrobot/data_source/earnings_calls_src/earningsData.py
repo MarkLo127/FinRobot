@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 import requests
 import json
@@ -7,14 +8,14 @@ from typing import List
 
 
 def correct_date(yr, dt):
-    """Some transcripts have incorrect date, correcting it
+    """某些記錄有不正確的日期，進行修正
 
-    Args:
-        yr (int): actual
-        dt (datetime): given date
+    參數：
+        yr (int): 實際年份
+        dt (datetime): 給定日期
 
-    Returns:
-        datetime: corrected date
+    返回：
+        datetime: 修正後的日期
     """
     dt = datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
     if dt.year != yr:
@@ -23,13 +24,13 @@ def correct_date(yr, dt):
 
 
 def extract_speakers(cont: str) -> List[str]:
-    """Extract the list of speakers
+    """提取發言者列表
 
-    Args:
-        cont (str): transcript content
+    參數：
+        cont (str): 記錄內容
 
-    Returns:
-        List[str]: list of speakers
+    返回：
+        List[str]: 發言者列表
     """
     pattern = re.compile(r"\n(.*?):")
     matches = pattern.findall(cont)
@@ -39,12 +40,12 @@ def extract_speakers(cont: str) -> List[str]:
 
 @retry(wait=wait_random_exponential(min=1, max=5), stop=stop_after_attempt(2))
 def get_earnings_transcript(quarter: str, ticker: str, year: int):
-    """Get the earnings transcripts
+    """獲取財報電話會議記錄
 
-    Args:
-        quarter (str)
-        ticker (str)
-        year (int)
+    參數：
+        quarter (str): 季度
+        ticker (str): 股票代碼
+        year (int): 年份
     """
     response = requests.get(
         f"https://discountingcashflows.com/api/transcript/{ticker}/{quarter}/{year}/",

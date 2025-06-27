@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .agent_library import library
 from typing import Any, Callable, Dict, List, Optional, Annotated
 import autogen
@@ -24,8 +25,8 @@ class FinRobot(AssistantAgent):
     def __init__(
         self,
         agent_config: str | Dict[str, Any],
-        system_message: str | None = None,  # overwrites previous config
-        toolkits: List[Callable | dict | type] = [],  # overwrites previous config
+        system_message: str | None = None,  # 覆蓋先前的配置
+        toolkits: List[Callable | dict | type] = [],  # 覆蓋先前的配置
         proxy: UserProxyAgent | None = None,
         **kwargs,
     ):
@@ -33,13 +34,13 @@ class FinRobot(AssistantAgent):
         if isinstance(agent_config, str):
             orig_name = agent_config
             name = orig_name.replace("_Shadow", "")
-            assert name in library, f"FinRobot {name} not found in agent library."
+            assert name in library, f"在代理庫中找不到 FinRobot {name}。"
             agent_config = library[name]
 
         agent_config = self._preprocess_config(agent_config)
 
-        assert agent_config, f"agent_config is required."
-        assert agent_config.get("name", ""), f"name needs to be in config."
+        assert agent_config, f"需要 agent_config。"
+        assert agent_config.get("name", ""), f"配置中需要名稱。"
 
         name = orig_name if orig_name else agent_config["name"]
         default_system_message = agent_config.get("profile", None)
@@ -78,9 +79,9 @@ class FinRobot(AssistantAgent):
 
         name = config.get("name", "")
         description = (
-            f"Name: {name}\nResponsibility:\n{responsibilities}"
+            f"姓名：{name}\n職責：\n{responsibilities}"
             if responsibilities
-            else f"Name: {name}"
+            else f"姓名：{name}"
         )
         config["description"] = description.strip()
 
@@ -158,7 +159,7 @@ class SingleAssistant(SingleAssistantBase):
                 **kwargs,
             )
 
-        print("Current chat finished. Resetting agents ...")
+        print("當前聊天已完成。正在重置代理...")
         self.reset()
 
     def reset(self):
@@ -193,7 +194,7 @@ class SingleAssistantRAG(SingleAssistant):
             code_execution_config=code_execution_config,
             **kwargs,
         )
-        assert retrieve_config, "retrieve config cannot be empty for RAG Agent."
+        assert retrieve_config, "RAG 代理的檢索配置不能為空。"
         rag_func, rag_assistant = get_rag_function(retrieve_config, rag_description)
         self.rag_assistant = rag_assistant
         register_function(
@@ -254,7 +255,7 @@ class SingleAssistantShadow(SingleAssistant):
                     "message": instruction_message,
                     "summary_method": "last_msg",
                     "max_turns": 2,
-                    "silent": True,  # mute the chat summary
+                    "silent": True,  # 靜音聊天摘要
                 }
             ],
             trigger=instruction_trigger,
@@ -262,7 +263,7 @@ class SingleAssistantShadow(SingleAssistant):
 
 
 """
-Multi Agent Workflows
+多代理工作流程
 """
 
 
@@ -273,7 +274,7 @@ class MultiAssistantBase(ABC):
         group_config: str | dict,
         agent_configs: List[
             Dict[str, Any] | str | ConversableAgent
-        ] = [],  # overwrites previous config
+        ] = [],  # 覆蓋先前的配置
         llm_config: Dict[str, Any] = {},
         user_proxy: UserProxyAgent | None = None,
         is_termination_msg=lambda x: x.get("content", "")
@@ -300,7 +301,7 @@ class MultiAssistantBase(ABC):
         else:
             self.user_proxy = user_proxy
         self.agent_configs = agent_configs or group_config.get("agents", [])
-        assert self.agent_configs, f"agent_configs is required."
+        assert self.agent_configs, f"需要 agent_configs。"
         self.agents = []
         self._init_agents()
         self.representative = self._get_representative()
@@ -322,7 +323,7 @@ class MultiAssistantBase(ABC):
             agent = self._init_single_agent(c)
             agent_dict[agent.name].append(agent)
 
-        # add index indicator for duplicate name/title
+        # 為重複的名稱/標題添加索引指示器
         for name, agent_list in agent_dict.items():
             if len(agent_list) == 1:
                 self.agents.append(agent_list[0])
@@ -343,7 +344,7 @@ class MultiAssistantBase(ABC):
                 cache=cache if use_cache else None,
                 **kwargs,
             )
-        print("Current chat finished. Resetting agents ...")
+        print("當前聊天已完成。正在重置代理...")
         self.reset()
 
     def reset(self):
@@ -355,7 +356,7 @@ class MultiAssistantBase(ABC):
 
 class MultiAssistant(MultiAssistantBase):
     """
-    Group Chat Workflow with multiple agents.
+    具有多個代理的群組聊天工作流程。
     """
 
     def _get_representative(self):
@@ -363,11 +364,11 @@ class MultiAssistant(MultiAssistantBase):
         def custom_speaker_selection_func(
             last_speaker: autogen.Agent, groupchat: autogen.GroupChat
         ):
-            """Define a customized speaker selection function.
-            A recommended way is to define a transition for each speaker in the groupchat.
+            """定義自定義發言者選擇函數。
+            建議的方法是為群組聊天中的每個發言者定義轉換。
 
-            Returns:
-                Return an `Agent` class or a string from ['auto', 'manual', 'random', 'round_robin'] to select a default method to use.
+            返回：
+                返回 `Agent` 類別或從 ['auto', 'manual', 'random', 'round_robin'] 中選擇字串以使用預設方法。
             """
             messages = groupchat.messages
             if len(messages) <= 1:
@@ -396,18 +397,18 @@ class MultiAssistant(MultiAssistantBase):
 
 class MultiAssistantWithLeader(MultiAssistantBase):
     """
-    Leader based Workflow with multiple agents connected to a leader agent through nested chats.
+    基於領導者的工作流程，多個代理通過嵌套聊天連接到領導者代理。
 
-    Group config has to follow the following structure:
+    群組配置必須遵循以下結構：
     {
         "leader": {
-            "title": "Leader Title",
-            "responsibilities": ["responsibility 1", "responsibility 2"]
+            "title": "領導者標題",
+            "responsibilities": ["職責 1", "職責 2"]
         },
         "agents": [
             {
-                "title": "Employee Title",
-                "responsibilities": ["responsibility 1", "responsibility 2"]
+                "title": "員工標題",
+                "responsibilities": ["職責 1", "職責 2"]
             }, ...
         ]
     }
@@ -417,13 +418,13 @@ class MultiAssistantWithLeader(MultiAssistantBase):
 
         assert (
             "leader" in self.group_config and "agents" in self.group_config
-        ), "Leader and Agents has to be explicitly defined in config."
+        ), "配置中必須明確定義領導者和代理。"
 
         assert (
             self.agent_configs
-        ), "At least one agent has to be defined in the group config."
+        ), "群組配置中至少要定義一個代理。"
 
-        # We consider only two situations for now: all same name / title or all different
+        # 我們現在只考慮兩種情況：所有相同名稱/標題或所有不同
         need_suffix = (
             len(set([c["title"] for c in self.agent_configs if isinstance(c, dict)]))
             == 1
@@ -441,15 +442,15 @@ class MultiAssistantWithLeader(MultiAssistantBase):
                 responsibilities = (
                     "\n".join([f" - {r}" for r in c.get("responsibilities", [])]),
                 )
-                group_desc += f"Name: {name}\nResponsibility:\n{responsibilities}\n\n"
+                group_desc += f"姓名：{name}\n職責：\n{responsibilities}\n\n"
 
         self.leader_config = self.group_config["leader"]
         self.leader_config["group_desc"] = group_desc.strip()
 
-        # Initialize Leader
+        # 初始化領導者
         leader = self._init_single_agent(self.leader_config)
 
-        # Register Leader - Agents connections
+        # 註冊領導者-代理連接
         for agent in self.agents:
             self.user_proxy.register_nested_chats(
                 [

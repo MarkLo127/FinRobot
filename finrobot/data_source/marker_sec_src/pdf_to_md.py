@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # import subprocess
 import os
 from marker.convert import convert_single_pdf
@@ -9,9 +10,16 @@ SAVE_DIR = "output/SEC_EDGAR_FILINGS_MD"
 
 # def run_marker(input_ticker_year_path:str,ticker:str,year:str,workers:int=4,max_workers:int=8,num_chunks:int=1):
 def run_marker(
-    input_ticker_year_path: str, output_ticker_year_path:str,batch_multiplier: int = 2
+    input_ticker_year_path: str, output_ticker_year_path: str, batch_multiplier: int = 2
 ):
+    """
+    運行 Marker 將 PDF 轉換為 Markdown
     
+    參數：
+        input_ticker_year_path (str): 輸入路徑
+        output_ticker_year_path (str): 輸出路徑
+        batch_multiplier (int): 批次乘數
+    """
 
     # subprocess.run(["marker", input_ticker_year_path,output_ticker_year_path,  "--workers", str(workers), "--num_chunks",str(num_chunks),"--max", str(max_workers) ,"--metadata_file", path_to_metadata])
     # return
@@ -27,5 +35,5 @@ def run_marker(
         subfolder_path = save_markdown(
             output_ticker_year_path, fname, full_text, images, out_meta
         )
-        print(f"Saved markdown to the {subfolder_path} folder")
+        print(f"Markdown 已儲存至 {subfolder_path} 資料夾")
     del model_lst

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from typing import List
 import re
 import pandas as pd
@@ -12,13 +13,14 @@ SEC_SEARCH_URL: Final[str] = "http://www.sec.gov/cgi-bin/browse-edgar"
 
 
 def _search_url(cik: Union[str, int]) -> str:
+    """構建 SEC 搜索 URL"""
     search_string = f"CIK={cik}&Find=Search&owner=exclude&action=getcompany"
     url = f"{SEC_SEARCH_URL}?{search_string}"
     return url
 
 
 def get_cik_by_ticker(ticker: str) -> str:
-    """Gets a CIK number from a stock ticker by running a search on the SEC website."""
+    """通過在 SEC 網站上運行搜索，從股票代碼獲取 CIK 編號。"""
     cik_re = re.compile(r".*CIK=(\d{10}).*")
     url = _search_url(ticker)
     headers = {
@@ -58,6 +60,15 @@ def sec_save_pdfs(
     filing_types: List[str] = ["10-K", "10-Q"],
     include_amends=True,
 ):
+    """
+    將 SEC 申報文件保存為 PDF 格式
+    
+    參數：
+        ticker (str): 股票代碼
+        year (str): 年份
+        filing_types (List[str]): 申報類型列表
+        include_amends (bool): 是否包含修正案
+    """
     cik = get_cik_by_ticker(ticker)
     rgld_cik = int(cik.lstrip("0"))
     ticker_year_path = os.path.join(BASE_DIR, f"{ticker}-{year}")
@@ -72,13 +83,13 @@ def sec_save_pdfs(
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     }
-    # Send a GET request to the URL with headers
+    # 向 URL 發送帶有標頭的 GET 請求
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
         json_data = response.json()
     else:
-        print(f"Error: Unable to fetch data. Status code: {response.status_code}")
+        print(f"錯誤：無法獲取數據。狀態碼：{response.status_code}")
 
     form_lists = []
     filings = json_data["filings"]
@@ -120,12 +131,13 @@ def sec_save_pdfs(
 
 
 def _convert_html_to_pdfs(html_urls, base_path: str):
+    """將 HTML URL 轉換為 PDF 檔案"""
     metadata_json = {}
     for html_url in html_urls:
         pdf_path = html_url[0].split("/")[-1]
-        # Add the filing type
+        # 添加申報類型
         pdf_path = pdf_path.replace(".htm", f"-{html_url[1]}.pdf")
-        # /A for amended is not a valid path
+        # /A 表示修正案，不是有效路徑
         pdf_path = pdf_path.replace("10-K/A", "10-KA")
         metadata_json[pdf_path] = {"languages": ["English"]}
         pdf_path = os.path.join(base_path, pdf_path)

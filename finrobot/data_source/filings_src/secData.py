@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from typing import List
 import re
 from finrobot.data_source.filings_src.sec_filings import SECExtractor
@@ -17,6 +18,15 @@ def sec_main(
     filing_types: List[str] = ["10-K", "10-Q"],
     include_amends=True,
 ):
+    """
+    主要的 SEC 文件處理函數
+    
+    參數：
+        ticker (str): 股票代碼
+        year (str): 年份
+        filing_types (List[str]): 申報類型列表
+        include_amends (bool): 是否包含修正案
+    """
     cik = get_cik_by_ticker(ticker)
     rgld_cik = int(cik.lstrip("0"))
 
@@ -30,13 +40,13 @@ def sec_main(
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     }
-    # Send a GET request to the URL with headers
+    # 向 URL 發送帶有標頭的 GET 請求
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
         json_data = response.json()
     else:
-        print(f"Error: Unable to fetch data. Status code: {response.status_code}")
+        print(f"錯誤：無法獲取數據。狀態碼：{response.status_code}")
 
     form_lists = []
     filings = json_data["filings"]
@@ -74,7 +84,7 @@ def sec_main(
         email="support@unstructured.io",
     )
     sec_extractor = SECExtractor(ticker=ticker)
-    print("Started Scraping")
+    print("開始爬取")
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         results = executor.map(get_filing_partial, acc_nums_list)
     results_texts = []
@@ -83,9 +93,9 @@ def sec_main(
             results_texts.append(res)
     assert len(results_texts) == len(
         acc_nums_list
-    ), f"The scraped text {len(results_texts)} is not matching with accession number texts {len(acc_nums_list)}"
-    print("Scraped")
-    print("Started Extracting")
+    ), f"爬取的文本數量 {len(results_texts)} 與存取編號文本數量 {len(acc_nums_list)} 不匹配"
+    print("爬取完成")
+    print("開始提取")
     with concurrent.futures.ProcessPoolExecutor(max_workers=4) as executor:
         results = executor.map(sec_extractor.get_section_texts_from_text, results_texts)
     section_texts = []
@@ -93,9 +103,9 @@ def sec_main(
         section_texts.append(res)
     assert len(section_texts) == len(
         acc_nums_list
-    ), f"The section text {len(section_texts)} is not matching with accession number texts {len(acc_nums_list)}"
+    ), f"章節文本數量 {len(section_texts)} 與存取編號文本數量 {len(acc_nums_list)} 不匹配"
 
-    print("Extracted")
+    print("提取完成")
     docs = []
     for idx, val in enumerate(form_lists):
         # val['sec_texts'] = section_texts[idx]

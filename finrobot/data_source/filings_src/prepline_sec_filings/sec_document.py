@@ -42,8 +42,8 @@ S1_TYPES: Final[List[str]] = ["S-1", "S-1/A"]
 
 ITEM_TITLE_RE = re.compile(r"(?i)item \d{1,3}(?:[a-z]|\([a-z]\))?(?:\.)?(?::)?")
 
-# NOTE(yuming): clean_sec_text is a partial cleaner from clean,
-# and is used for cleaning a section of text from a SEC filing.
+# 注意(yuming): clean_sec_text 是 clean 的部分清理器，
+# 用於清理 SEC 申報文件中的文本部分。
 clean_sec_text = partial(
     clean, extra_whitespace=True, dashes=True, trailing_punctuation=True
 )
@@ -51,10 +51,10 @@ clean_sec_text = partial(
 
 def _raise_for_invalid_filing_type(filing_type: Optional[str]):
     if not filing_type:
-        raise ValueError("Filing type is empty.")
+        raise ValueError("申報類型為空。")
     elif filing_type not in VALID_FILING_TYPES:
         raise ValueError(
-            f"Filing type was {filing_type}. Expected: {VALID_FILING_TYPES}"
+            f"申報類型為 {filing_type}。預期為：{VALID_FILING_TYPES}"
         )
 
 
@@ -62,24 +62,24 @@ class SECDocument(HTMLDocument):
     filing_type = None
 
     def _filter_table_of_contents(self, elements: List[Text]) -> List[Text]:
-        """Filter out unnecessary elements in the table of contents using keyword search."""
+        """使用關鍵字搜尋過濾掉目錄中不必要的元素。"""
         if self.filing_type in REPORT_TYPES:
-            # NOTE(yuming): Narrow TOC as all elements within
-            # the first two titles that contain the keyword 'part i\b'.
+            # 注意(yuming): 將目錄縮小為
+            # 包含關鍵字「part i\b」的前兩個標題內的所有元素。
             start, end = None, None
             for i, element in enumerate(elements):
                 if bool(re.match(r"(?i)part i\b", clean_sec_text(element.text))):
                     if start is None:
-                        # NOTE(yuming): Found the start of the TOC section.
+                        # 注意(yuming): 找到目錄部分的開頭。
                         start = i
                     else:
-                        # NOTE(yuming): Found the end of the TOC section.
+                        # 注意(yuming): 找到目錄部分的結尾。
                         end = i - 1
                         filtered_elements = elements[start:end]
                         return filtered_elements
         elif self.filing_type in S1_TYPES:
-            # NOTE(yuming): Narrow TOC as all elements within
-            # the first pair of duplicated titles that contain the keyword 'prospectus'.
+            # 注意(yuming): 將目錄縮小為
+            # 包含關鍵字「prospectus」的第一對重複標題內的所有元素。
             title_indices = defaultdict(list)
             for i, element in enumerate(elements):
                 clean_title_text = clean_sec_text(element.text).lower()
@@ -88,33 +88,33 @@ class SECDocument(HTMLDocument):
                 k: v for k, v in title_indices.items() if len(v) > 1
             }
             for title, indices in duplicate_title_indices.items():
-                # NOTE(yuming): Make sure that we find the pair of duplicated titles.
+                # 注意(yuming): 確保我們找到重複的標題對。
                 if "prospectus" in title and len(indices) == 2:
                     start = indices[0]
                     end = indices[1] - 1
                     filtered_elements = elements[start:end]
                     return filtered_elements
-        # NOTE(yuming): Probably better ways to improve TOC,
-        # but now we return [] if it fails to find the keyword.
+        # 注意(yuming): 可能有更好的方法來改善目錄，
+        # 但現在如果找不到關鍵字，我們返回 []。
         return []
 
     def get_table_of_contents(self) -> HTMLDocument:
-        """Identifies text sections that are likely the table of contents."""
+        """識別可能是目錄的文本部分。"""
         out_cls = self.__class__
         _raise_for_invalid_filing_type(self.filing_type)
         title_locs = to_sklearn_format(self.elements)
         if len(title_locs) == 0:
             return out_cls.from_elements([])
-        # NOTE(alan): Might be a way to do the same thing that doesn't involve the transformations
-        # necessary to get it into sklearn. We're just looking for densely packed Titles.
+        # 注意(alan): 可能有一種方法可以做同樣的事情，而不需要
+        # 為了將其放入 sklearn 所需的轉換。我們只是在尋找密集排列的標題。
         res = DBSCAN(eps=6.0).fit_predict(title_locs)
         for i in range(res.max() + 1):
             idxs = cluster_num_to_indices(i, title_locs, res)
             cluster_elements: List[Text] = [self.elements[i] for i in idxs]
             if any(
                 [
-                    # TODO(alan): Maybe swap risk title out for something more generic? It helps to
-                    # have 2 markers though, I think.
+                    # TODO(alan): 也許將風險標題換成更通用的東西？但我想
+                    # 有 2 個標記會有所幫助。
                     is_risk_title(el.text, self.filing_type)
                     for el in cluster_elements
                     if isinstance(el, Title)
@@ -132,12 +132,11 @@ class SECDocument(HTMLDocument):
         return out_cls.from_elements(self._filter_table_of_contents(self.elements))
 
     def get_section_narrative_no_toc(self, section: SECSection) -> List[NarrativeText]:
-        """Identifies narrative text sections that fall under the given section heading without
-        using the table of contents."""
+        """在不使用目錄的情況下，識別屬於給定章節標題下的敘述性文本部分。"""
         _raise_for_invalid_filing_type(self.filing_type)
-        # NOTE(robinson) - We are not skipping table text because the risk narrative section
-        # usually does not contain any tables and sometimes tables are used for
-        # title formating
+        # 注意(robinson) - 我們不跳過表格文本，因為風險敘述部分
+        # 通常不包含任何表格，有時表格用於
+        # 標題格式化
         section_elements: List[NarrativeText] = list()
         in_section = False
         for element in self.elements:
@@ -161,14 +160,14 @@ class SECDocument(HTMLDocument):
     def _get_toc_sections(
         self, section: SECSection, toc: HTMLDocument
     ) -> Tuple[Text, Text]:
-        """Identifies section title and next section title in TOC under the given section heading"""
-        # Note(yuming): The matching section and the section after the matching section
-        # can be thought of as placeholders to look for matching content below the toc.
+        """在給定章節標題下，識別目錄中的章節標題和下一個章節標題"""
+        # 注意(yuming): 匹配的章節和匹配章節之後的章節
+        # 可以被認為是在目錄下方尋找匹配內容的佔位符。
         section_toc = first(
             el for el in toc.elements if is_section_elem(section, el, self.filing_type)
         )
         if section_toc is None:
-            # NOTE(yuming): unable to identify the section in TOC
+            # 注意(yuming): 無法在目錄中識別該章節
             return (None, None)
 
         after_section_toc = toc.after_element(section_toc)
@@ -178,36 +177,36 @@ class SECDocument(HTMLDocument):
             if not is_section_elem(section, el, self.filing_type)
         )
         if next_section_toc is None:
-            # NOTE(yuming): unable to identify the next section title in TOC,
-            # will leads to failure in finding the end of the section
+            # 注意(yuming): 無法在目錄中識別下一個章節標題，
+            # 將導致無法找到該章節的結尾
             return (section_toc, None)
         return (section_toc, next_section_toc)
 
     def get_section_narrative(self, section: SECSection) -> List[NarrativeText]:
-        """Identifies narrative text sections that fall under the given section heading"""
+        """識別屬於給定章節標題下的敘述性文本部分"""
         _raise_for_invalid_filing_type(self.filing_type)
-        # NOTE(robinson) - We are not skipping table text because the risk narrative section
-        # usually does not contain any tables and sometimes tables are used for
-        # title formating
+        # 注意(robinson) - 我們不跳過表格文本，因為風險敘述部分
+        # 通常不包含任何表格，有時表格用於
+        # 標題格式化
         toc = self.get_table_of_contents()
         if not toc.pages:
             return self.get_section_narrative_no_toc(section)
 
-        # Note(yuming): section_toc is the section title in TOC,
-        # next_section_toc is the section title right after section_toc in TOC
+        # 注意(yuming): section_toc 是目錄中的章節標題，
+        # next_section_toc 是目錄中緊跟在 section_toc 之後的章節標題
         section_toc, next_section_toc = self._get_toc_sections(section, toc)
         if section_toc is None:
-            # NOTE(yuming): fail to find the section title in TOC
+            # 注意(yuming): 在目錄中找不到章節標題
             return []
 
-        # NOTE(yuming): we use doc after next_section_toc instead of after toc
-        # to workaround an issue where the TOC grabbed too many elements by
-        # starting to parse after the section matched in the TOC
+        # 注意(yuming): 我們使用 next_section_toc 之後的文檔而不是 toc 之後的文檔
+        # 來解決目錄因從目錄中匹配的章節後開始解析而
+        # 抓取過多元素的問題
         doc_after_section_toc = self.after_element(
             next_section_toc if next_section_toc else section_toc
         )
-        # NOTE(yuming): map section_toc to the section title after TOC
-        # to find the start of the section
+        # 注意(yuming): 將 section_toc 映射到目錄後的章節標題
+        # 以找到該章節的開頭
         section_start_element = get_element_by_title(
             reversed(doc_after_section_toc.elements), section_toc.text, self.filing_type
         )
@@ -215,23 +214,23 @@ class SECDocument(HTMLDocument):
             return []
         doc_after_section_heading = self.after_element(section_start_element)
 
-        # NOTE(yuming): Checks if section_toc is the last section in toc based on
-        # the structure of the report filings or fails to find the section title in TOC.
-        # returns everything up to the next Title element
-        # to avoid the worst case of returning the entire doc.
+        # 注意(yuming): 根據報告申報的結構或
+        # 在目錄中找不到章節標題，檢查 section_toc 是否為目錄中的最後一個章節。
+        # 返回直到下一個標題元素的所有內容
+        # 以避免返回整個文檔的最壞情況。
         if self._is_last_section_in_report(section, toc) or next_section_toc is None:
-            # returns everything after section_start_element in doc
+            # 返回文檔中 section_start_element 之後的所有內容
             return get_narrative_texts(doc_after_section_heading, up_to_next_title=True)
 
-        # NOTE(yuming): map next_section_toc to the section title after TOC
-        # to find the start of the next section, which is also the end of the section we want
+        # 注意(yuming): 將 next_section_toc 映射到目錄後的章節標題
+        # 以找到下一個章節的開頭，這也是我們想要的章節的結尾
         section_end_element = get_element_by_title(
             doc_after_section_heading.elements, next_section_toc.text, self.filing_type
         )
 
         if section_end_element is None:
-            # NOTE(yuming): returns everything up to the next Title element
-            # to avoid the worst case of returning the entire doc.
+            # 注意(yuming): 返回直到下一個標題元素的所有內容
+            # 以避免返回整個文檔的最壞情況。
             return get_narrative_texts(doc_after_section_heading, up_to_next_title=True)
 
         return get_narrative_texts(
@@ -239,7 +238,7 @@ class SECDocument(HTMLDocument):
         )
 
     def get_risk_narrative(self) -> List[NarrativeText]:
-        """Identifies narrative text sections that fall under the "risk" heading"""
+        """識別「風險」標題下的敘述性文本部分"""
         return self.get_section_narrative(SECSection.RISK_FACTORS)
 
     def doc_after_cleaners(
@@ -249,13 +248,13 @@ class SECDocument(HTMLDocument):
             skip_headers_and_footers, skip_table_text, inplace
         )
         if not inplace:
-            # NOTE(alan): Copy filing_type since this attribute isn't in the base class
+            # 注意(alan): 複製 filing_type，因為此屬性不在基類中
             new_doc.filing_type = self.filing_type
         return new_doc
 
     def _read_xml(self, content):
         super()._read_xml(content)
-        # NOTE(alan): Get filing type from xml since this is not relevant to the base class.
+        # 注意(alan): 從 xml 中獲取申報類型，因為這與基類無關。
         type_tag = self.document_tree.find(".//type")
         if type_tag is not None:
             self.filing_type = type_tag.text.strip()
@@ -264,10 +263,10 @@ class SECDocument(HTMLDocument):
     def _is_last_section_in_report(
         self, section: SECSection, toc: HTMLDocument
     ) -> bool:
-        """Checks to see if the section is the last section in toc for a report types filing."""
-        # Note(yuming): This method assume the section already exists in toc.
+        """檢查該章節是否為報告類型申報目錄中的最後一個章節。"""
+        # 注意(yuming): 此方法假設該章節已存在於目錄中。
         if self.filing_type in ["10-K", "10-K/A"]:
-            # try to get FORM_SUMMARY as last section, else then try to get EXHIBITS.
+            # 嘗試將 FORM_SUMMARY 作為最後一個章節，否則嘗試將 EXHIBITS 作為最後一個章節。
             if section == SECSection.FORM_SUMMARY:
                 return True
             if section == SECSection.EXHIBITS:
@@ -276,11 +275,11 @@ class SECDocument(HTMLDocument):
                     for el in toc.elements
                     if is_section_elem(SECSection.FORM_SUMMARY, el, self.filing_type)
                 )
-                # if FORM_SUMMARY is not in toc, the last section is EXHIBITS
+                # 如果 FORM_SUMMARY 不在目錄中，則最後一個章節是 EXHIBITS
                 if form_summary_section is None:
                     return True
         if self.filing_type in ["10-Q", "10-Q/A"]:
-            # try to get EXHIBITS as last section.
+            # 嘗試將 EXHIBITS 作為最後一個章節。
             if section == SECSection.EXHIBITS:
                 return True
         return False
@@ -289,8 +288,8 @@ class SECDocument(HTMLDocument):
 def get_narrative_texts(
     doc: HTMLDocument, up_to_next_title: Optional[bool] = False
 ) -> List[Text]:
-    """Returns a list of NarrativeText or ListItem from document,
-    with option to return narrative texts only up to next Title element."""
+    """從文檔中返回 NarrativeText 或 ListItem 的列表，
+    可選擇僅返回直到下一個標題元素的敘述性文本。"""
     if up_to_next_title:
         narrative_texts = []
         for el in doc.elements:
@@ -310,7 +309,7 @@ def get_narrative_texts(
 def is_section_elem(
     section: SECSection, elem: Text, filing_type: Optional[str]
 ) -> bool:
-    """Checks to see if a text element matches the section title for a given filing type"""
+    """檢查文本元素是否與給定申報類型的章節標題匹配"""
     _raise_for_invalid_filing_type(filing_type)
     if section is SECSection.RISK_FACTORS:
         return is_risk_title(elem.text, filing_type=filing_type)
@@ -330,7 +329,7 @@ def is_section_elem(
 
 
 def is_item_title(title: str, filing_type: Optional[str]) -> bool:
-    """Determines if a title corresponds to an item heading."""
+    """確定標題是否對應於項目標題。"""
     if filing_type in REPORT_TYPES:
         return is_10k_item_title(title)
     elif filing_type in S1_TYPES:
@@ -339,7 +338,7 @@ def is_item_title(title: str, filing_type: Optional[str]) -> bool:
 
 
 def is_risk_title(title: str, filing_type: Optional[str]) -> bool:
-    """Checks to see if the title matches the pattern for the risk heading."""
+    """檢查標題是否與風險標題的模式匹配。"""
     if filing_type in REPORT_TYPES:
         return is_10k_risk_title(clean_sec_text(title, lowercase=True))
     elif filing_type in S1_TYPES:
@@ -348,36 +347,36 @@ def is_risk_title(title: str, filing_type: Optional[str]) -> bool:
 
 
 def is_toc_title(title: str) -> bool:
-    """Checks to see if the title matches the pattern for the table of contents."""
+    """檢查標題是否與目錄的模式匹配。"""
     clean_title = clean_sec_text(title, lowercase=True)
     return (clean_title == "table of contents") or (clean_title == "index")
 
 
 def is_10k_item_title(title: str) -> bool:
-    """Determines if a title corresponds to a 10-K item heading."""
+    """確定標題是否對應於 10-K 項目標題。"""
     return ITEM_TITLE_RE.match(clean_sec_text(title, lowercase=True)) is not None
 
 
 def is_10k_risk_title(title: str) -> bool:
-    """Checks to see if the title matches the pattern for the risk heading."""
+    """檢查標題是否與風險標題的模式匹配。"""
     return ("1a" in title.lower() or "risk factors" in title.lower()) and not (
         "summary" in title.lower()
     )
 
 
 def is_s1_section_title(title: str) -> bool:
-    """Detemines if a title corresponds to a section title."""
+    """確定標題是否對應於章節標題。"""
     return title.strip().isupper()
 
 
 def is_s1_risk_title(title: str) -> bool:
-    """Checks to see if the title matches the pattern for the risk heading."""
+    """檢查標題是否與風險標題的模式匹配。"""
     return title.strip().lower() == "risk factors"
 
 
 def to_sklearn_format(elements: List[Element]) -> npt.NDArray[np.float32]:
-    """The input to clustering needs to be locations in euclidean space, so we need to interpret
-    the locations of Titles within the sequence of elements as locations in 1d space
+    """聚類的輸入需要是歐幾里得空間中的位置，因此我們需要將
+    元素序列中標題的位置解釋為一維空間中的位置
     """
     is_title: npt.NDArray[np.bool_] = np.array(
         [is_possible_title(el.text) for el in elements][: len(elements)], dtype=bool
@@ -389,16 +388,16 @@ def to_sklearn_format(elements: List[Element]) -> npt.NDArray[np.float32]:
 def cluster_num_to_indices(
     num: int, elem_idxs: npt.NDArray[np.float32], res: npt.NDArray[np.int_]
 ) -> List[int]:
-    """Keeping in mind the input to clustering was indices in a list of elements interpreted as
-    location in 1-d space, this function gives back the original indices of elements that are
-    members of the cluster with the given number.
+    """請記住，聚類的輸入是元素列表中的索引，解釋為
+    一維空間中的位置，此函數返回屬於具有給定編號的聚類的
+    元素的原始索引。
     """
     idxs = elem_idxs[res == num].astype(int).flatten().tolist()
     return idxs
 
 
 def first(it: Iterable) -> Any:
-    """Grabs the first item in an iterator."""
+    """獲取迭代器中的第一項。"""
     try:
         out = next(iter(it))
     except StopIteration:
@@ -407,14 +406,14 @@ def first(it: Iterable) -> Any:
 
 
 def match_s1_toc_title_to_section(text: str, title: str) -> bool:
-    """Matches an S-1 style title from the table of contents to the associated title in the document
-    body"""
+    """將 S-1 樣式的標題從目錄匹配到文檔
+    正文中關聯的標題"""
     return text == title
 
 
 def match_10k_toc_title_to_section(text: str, title: str) -> bool:
-    """Matches a 10-K style title from the table of contents to the associated title in the document
-    body"""
+    """將 10-K 樣式的標題從目錄匹配到文檔
+    正文中關聯的標題"""
     if re.match(ITEM_TITLE_RE, title):
         return text.startswith(title)
     else:
@@ -423,8 +422,8 @@ def match_10k_toc_title_to_section(text: str, title: str) -> bool:
 
 
 def remove_item_from_section_text(text: str) -> str:
-    """Removes 'item' heading from section text for 10-K/Q forms as preparation for other matching
-    techniques"""
+    """從 10-K/Q 表格的章節文本中刪除「項目」標題，為其他匹配
+    技術做準備"""
     return re.sub(ITEM_TITLE_RE, "", text).strip()
 
 
@@ -433,7 +432,7 @@ def get_element_by_title(
     title: str,
     filing_type: Optional[str],
 ) -> Optional[Element]:
-    """Get element from Element list whose text approximately matches title"""
+    """從元素列表中獲取文本與標題大致匹配的元素"""
     _raise_for_invalid_filing_type(filing_type)
     if filing_type in REPORT_TYPES:
         match = match_10k_toc_title_to_section
