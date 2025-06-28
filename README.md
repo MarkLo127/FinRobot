@@ -126,6 +126,12 @@ pip install -U finrobot
 ```
 pip install -e .
 ```
+
+```
+cd FinNLP
+pip install -e .
+```
+
 **4. 修改 OAI_CONFIG_LIST_sample 文件**
 ```shell
 1) 將 OAI_CONFIG_LIST_sample 重命名為 OAI_CONFIG_LIST

@@ -55,7 +55,7 @@ def date_range_download(date_range, config, tag, start_date, end_date, stock, se
     return selected
 
 
-class FinNLPUtils:
+class finnlpUtils:
 
     def cnbc_streaming_download(
         keyword: Annotated[str, "搜尋關鍵字"],
@@ -154,13 +154,13 @@ class FinNLPUtils:
 # 使用範例
 if __name__ == "__main__":
     # 串流下載範例
-    # FinNLPUtils.cnbc_streaming_download("Apple", rounds=5, save_path="cnbc_news.csv")
-    # FinNLPUtils.yicai_streaming_download("蘋果", rounds=5, save_path="yicai_news.csv")
-    # FinNLPUtils.investorplace_streaming_download("AAPL", rounds=5, save_path="investorplace_news.csv")
-    # FinNLPUtils.xueqiu_streaming_download("蘋果", rounds=5, save_path="xueqiu_posts.csv")
-    # FinNLPUtils.stocktwits_streaming_download("AAPL", rounds=5, save_path="stocktwits_posts.csv")
+    # finnlpUtils.cnbc_streaming_download("Apple", rounds=5, save_path="cnbc_news.csv")
+    # finnlpUtils.yicai_streaming_download("蘋果", rounds=5, save_path="yicai_news.csv")
+    # finnlpUtils.investorplace_streaming_download("AAPL", rounds=5, save_path="investorplace_news.csv")
+    # finnlpUtils.xueqiu_streaming_download("蘋果", rounds=5, save_path="xueqiu_posts.csv")
+    # finnlpUtils.stocktwits_streaming_download("AAPL", rounds=5, save_path="stocktwits_posts.csv")
     
     # 日期範圍下載範例
-    # FinNLPUtils.sina_finance_date_range_download("2020-01-01", "2020-06-01", "AAPL", save_path="sina_news.csv")
-    # FinNLPUtils.finnhub_date_range_download("2020-01-01", "2020-06-01", "AAPL", save_path="finnhub_news.csv")
+    # finnlpUtils.sina_finance_date_range_download("2020-01-01", "2020-06-01", "AAPL", save_path="sina_news.csv")
+    # finnlpUtils.finnhub_date_range_download("2020-01-01", "2020-06-01", "AAPL", save_path="finnhub_news.csv")
     pass

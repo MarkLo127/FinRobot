@@ -5,7 +5,8 @@ from sec_api import ExtractorApi, QueryApi, RenderApi
 from functools import wraps
 from typing import Annotated
 from ..utils import SavePathType, decorate_all_methods
-from ..data_source import FMPUtils
+from ..data_source.fmp_utils import FMPUtils
+
 
 
 CACHE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache")
