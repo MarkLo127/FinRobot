@@ -122,6 +122,7 @@ cd FinRobot
 pip install -e .
 ```
 ```
+git clone https://github.com/AI4Finance-Foundation/FinNLP.git
 cd FinNLP
 pip install -e .
 ```
