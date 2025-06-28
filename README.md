@@ -116,17 +116,11 @@ conda activate finrobot
 git clone https://github.com/MarkLo127/FinRobot.git
 cd FinRobot
 ```
-**3. 從源碼或 pypi 安裝 finrobot 及其依賴**
+**3. 從源代碼安裝 finrobot**
 
-從 pypi 獲取最新版本
-```bash
-pip install -U finrobot
-```
-或直接從此倉庫安裝
 ```
 pip install -e .
 ```
-
 ```
 cd FinNLP
 pip install -e .
