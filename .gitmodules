@@ -1,3 +1,4 @@
 [submodule "FinNLP"]
 	path = FinNLP
 	url = https://github.com/MarkLo127/FinNLP.git
+	branch = main
