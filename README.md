@@ -123,7 +123,7 @@ cd FinRobot
 ```
 **3. 安裝 finrobot 及其依賴項**
 ```
-pip install -e .
+uv pip install -e .
 ```
 **4. 修改 OAI_CONFIG_LIST_sample 文件**
 ```shell
