@@ -18,6 +18,8 @@ from reportlab.platypus import (
 from reportlab.lib.units import inch
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT
+from reportlab.pdfgen import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 from ..data_source import FMPUtils, YFinanceUtils
 from .analyzer import ReportAnalysisUtils
@@ -78,6 +80,11 @@ class ReportLabUtils:
             os.makedirs(os.path.dirname(pdf_path), exist_ok=True)
             doc = SimpleDocTemplate(pdf_path, pagesize=pagesizes.A4)
         
+            # Register fonts
+            font_path = os.path.join(os.path.dirname(__file__), '..', 'LXGW_WenKai_Mono_TC')
+            pdfmetrics.registerFont(TTFont('LXGW-Regular', os.path.join(font_path, 'LXGWWenKaiMonoTC-Regular.ttf')))
+            pdfmetrics.registerFont(TTFont('LXGW-Bold', os.path.join(font_path, 'LXGWWenKaiMonoTC-Bold.ttf')))
+            pdfmetrics.registerFont(TTFont('LXGW-Light', os.path.join(font_path, 'LXGWWenKaiMonoTC-Light.ttf')))
 
 
             # 定義兩個欄位的 Frame
@@ -144,7 +151,7 @@ class ReportLabUtils:
             custom_style = ParagraphStyle(
                 name="Custom",
                 parent=styles["Normal"],
-                fontName="Helvetica",
+                fontName="LXGW-Regular",
                 fontSize=10,
                 # leading=15,
                 alignment=TA_JUSTIFY,
@@ -153,7 +160,7 @@ class ReportLabUtils:
             title_style = ParagraphStyle(
                 name="TitleCustom",
                 parent=styles["Title"],
-                fontName="Helvetica-Bold",
+                fontName="LXGW-Bold",
                 fontSize=16,
                 leading=20,
                 alignment=TA_LEFT,
@@ -163,7 +170,7 @@ class ReportLabUtils:
             subtitle_style = ParagraphStyle(
                 name="Subtitle",
                 parent=styles["Heading2"],
-                fontName="Helvetica-Bold",
+                fontName="LXGW-Bold",
                 fontSize=14,
                 leading=12,
                 alignment=TA_LEFT,
@@ -174,8 +181,8 @@ class ReportLabUtils:
                 [
                     ("BACKGROUND", (0, 0), (-1, -1), colors.white),
                     ("BACKGROUND", (0, 0), (-1, 0), colors.white),
-                    ("FONT", (0, 0), (-1, -1), "Helvetica", 7),
-                    ("FONT", (0, 0), (-1, 0), "Helvetica-Bold", 14),
+                    ("FONT", (0, 0), (-1, -1), "LXGW-Regular", 7),
+                    ("FONT", (0, 0), (-1, 0), "LXGW-Bold", 14),
                     ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
                     # 所有儲存格左對齊
                     ("ALIGN", (0, 0), (-1, -1), "LEFT"),
@@ -227,8 +234,8 @@ class ReportLabUtils:
                 [
                     ("BACKGROUND", (0, 0), (-1, -1), colors.white),
                     ("BACKGROUND", (0, 0), (-1, 0), colors.white),
-                    ("FONT", (0, 0), (-1, -1), "Helvetica", 8),
-                    ("FONT", (0, 0), (-1, 0), "Helvetica-Bold", 12),
+                    ("FONT", (0, 0), (-1, -1), "LXGW-Regular", 8),
+                    ("FONT", (0, 0), (-1, 0), "LXGW-Bold", 12),
                     ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
                     # 第一欄左對齊
                     ("ALIGN", (0, 1), (0, -1), "LEFT"),
@@ -243,7 +250,7 @@ class ReportLabUtils:
             data = [
                 ["FinRobot"],
                 ["https://ai4finance.org/"],
-                ["https://github.com/AI4Finance-Foundation/FinRobot"],
+                ["https://github.com/MarkLo127/FinRobot"],
                 [f"報告日期：{filing_date}"],
             ]
             col_widths = [full_length]
