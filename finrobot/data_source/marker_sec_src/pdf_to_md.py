@@ -27,5 +27,5 @@ def run_marker(
         subfolder_path = save_markdown(
             output_ticker_year_path, fname, full_text, images, out_meta
         )
-        print(f"Saved markdown to the {subfolder_path} folder")
+        print(f"已將 markdown 儲存至 {subfolder_path} 資料夾")
     del model_lst

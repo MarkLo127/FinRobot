@@ -3,17 +3,17 @@ from typing import Annotated
 class TextUtils:
 
     def check_text_length(
-        text: Annotated[str, "text to check"],
-        min_length: Annotated[int, "minimum length of the text, default to 0"] = 0,
-        max_length: Annotated[int, "maximum length of the text, default to 100000"] = 100000,
+        text: Annotated[str, "要檢查的文字"],
+        min_length: Annotated[int, "文字的最小長度，預設為 0"] = 0,
+        max_length: Annotated[int, "文字的最大長度，預設為 100000"] = 100000,
     ) -> str:
         """
-        Check if the length of the text is exceeds than the maximum length.
+        檢查文字長度是否超過最大長度。
         """
         length = len(text.split())
         if length > max_length:
-            return f"Text length {length} exceeds the maximum length of {max_length}."
+            return f"文字長度 {length} 超過最大長度 {max_length}。"
         elif length < min_length:
-            return f"Text length {length} is less than the minimum length of {min_length}."
+            return f"文字長度 {length} 小於最小長度 {min_length}。"
         else:
-            return f"Text length {length} is within the expected range."
+            return f"文字長度 {length} 在預期範圍內。"

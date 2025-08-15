@@ -1,43 +1,43 @@
 SECTIONS_10K = (
-    "BUSINESS",  # ITEM 1
-    "RISK_FACTORS",  # ITEM 1A
-    "UNRESOLVED_STAFF_COMMENTS",  # ITEM 1B
-    "PROPERTIES",  # ITEM 2
-    "LEGAL_PROCEEDINGS",  # ITEM 3
-    "MINE_SAFETY",  # ITEM 4
-    "MARKET_FOR_REGISTRANT_COMMON_EQUITY",  # ITEM 5
-    # NOTE(robinson) - ITEM 6 is "RESERVED"
-    "MANAGEMENT_DISCUSSION",  # ITEM 7
-    "MARKET_RISK_DISCLOSURES",  # ITEM 7A
-    "FINANCIAL_STATEMENTS",  # ITEM 8
-    "ACCOUNTING_DISAGREEMENTS",  # ITEM 9
-    "CONTROLS_AND_PROCEDURES",  # ITEM 9A
-    # NOTE(robinson) - ITEM 9B is other information
-    "FOREIGN_JURISDICTIONS",  # ITEM 9C
-    "MANAGEMENT",  # ITEM 10
-    "COMPENSATION",  # ITEM 11
-    "PRINCIPAL_STOCKHOLDERS",  # ITEM 12
-    "RELATED_PARTY_TRANSACTIONS",  # ITEM 13
-    "ACCOUNTING_FEES",  # ITEM 14
-    "EXHIBITS",  # ITEM 15
-    "FORM_SUMMARY",  # ITEM 16
+    "BUSINESS",  # 項目 1
+    "RISK_FACTORS",  # 項目 1A
+    "UNRESOLVED_STAFF_COMMENTS",  # 項目 1B
+    "PROPERTIES",  # 項目 2
+    "LEGAL_PROCEEDINGS",  # 項目 3
+    "MINE_SAFETY",  # 項目 4
+    "MARKET_FOR_REGISTRANT_COMMON_EQUITY",  # 項目 5
+    # 注意(robinson) - 項目 6 為「保留」
+    "MANAGEMENT_DISCUSSION",  # 項目 7
+    "MARKET_RISK_DISCLOSURES",  # 項目 7A
+    "FINANCIAL_STATEMENTS",  # 項目 8
+    "ACCOUNTING_DISAGREEMENTS",  # 項目 9
+    "CONTROLS_AND_PROCEDURES",  # 項目 9A
+    # 注意(robinson) - 項目 9B 為其他資訊
+    "FOREIGN_JURISDICTIONS",  # 項目 9C
+    "MANAGEMENT",  # 項目 10
+    "COMPENSATION",  # 項目 11
+    "PRINCIPAL_STOCKHOLDERS",  # 項目 12
+    "RELATED_PARTY_TRANSACTIONS",  # 項目 13
+    "ACCOUNTING_FEES",  # 項目 14
+    "EXHIBITS",  # 項目 15
+    "FORM_SUMMARY",  # 項目 16
 )
 
-# NOTE(robinson) - Sections are listed in the following document from SEC
-# ref: https://www.sec.gov/files/form10-q.pdf
+# 注意(robinson) - 章節列於 SEC 的以下文件中
+# 參考：https://www.sec.gov/files/form10-q.pdf
 SECTIONS_10Q = (
-    # Part I - Financial information
-    "FINANCIAL_STATEMENTS",  # ITEM 1
-    "MANAGEMENT_DISCUSSION",  # ITEM 2
-    "MARKET_RISK_DISCLOSURES",  # ITEM 3
-    "CONTROLS_AND_PROCEDURES",  # ITEM 4
-    # Part II - Other information
-    "LEGAL_PROCEEDINGS",  # ITEM 1
-    "RISK_FACTORS",  # ITEM 1A
-    "USE_OF_PROCEEDS",  # ITEM 2
-    "DEFAULTS",  # ITEM 3
-    "MINE_SAFETY",  # ITEM 4
-    "OTHER_INFORMATION",  # ITEM 5
+    # 第 I 部分 - 財務資訊
+    "FINANCIAL_STATEMENTS",  # 項目 1
+    "MANAGEMENT_DISCUSSION",  # 項目 2
+    "MARKET_RISK_DISCLOSURES",  # 項目 3
+    "CONTROLS_AND_PROCEDURES",  # 項目 4
+    # 第 II 部分 - 其他資訊
+    "LEGAL_PROCEEDINGS",  # 項目 1
+    "RISK_FACTORS",  # 項目 1A
+    "USE_OF_PROCEEDS",  # 項目 2
+    "DEFAULTS",  # 項目 3
+    "MINE_SAFETY",  # 項目 4
+    "OTHER_INFORMATION",  # 項目 5
 )
 
 SECTIONS_S1 = [

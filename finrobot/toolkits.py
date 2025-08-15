@@ -25,7 +25,7 @@ def register_toolkits(
     executor: ConversableAgent,
     **kwargs
 ):
-    """Register tools from a configuration list."""
+    """從設定清單中註冊工具。"""
 
     for tool in config:
 
@@ -36,7 +36,7 @@ def register_toolkits(
         tool_dict = {"function": tool} if callable(tool) else tool
         if "function" not in tool_dict or not callable(tool_dict["function"]):
             raise ValueError(
-                "Function not found in tool configuration or not callable."
+                "在工具設定中找不到函式或不可呼叫。"
             )
 
         tool_function = tool_dict["function"]
@@ -52,29 +52,29 @@ def register_toolkits(
 
 
 def register_code_writing(caller: ConversableAgent, executor: ConversableAgent):
-    """Register code writing tools."""
+    """註冊程式碼撰寫工具。"""
 
     register_toolkits(
         [
             {
                 "function": CodingUtils.list_dir,
                 "name": "list_files",
-                "description": "List files in a directory.",
+                "description": "列出目錄中的檔案。",
             },
             {
                 "function": CodingUtils.see_file,
                 "name": "see_file",
-                "description": "Check the contents of a chosen file.",
+                "description": "檢查所選檔案的內容。",
             },
             {
                 "function": CodingUtils.modify_code,
                 "name": "modify_code",
-                "description": "Replace old piece of code with new one.",
+                "description": "以新程式碼取代舊程式碼。",
             },
             {
                 "function": CodingUtils.create_file_with_code,
                 "name": "create_file_with_code",
-                "description": "Create a new file with provided code.",
+                "description": "使用提供的程式碼建立新檔案。",
             },
         ],
         caller,
@@ -88,7 +88,7 @@ def register_tookits_from_cls(
     cls: type,
     include_private: bool = False,
 ):
-    """Register all methods of a class as tools."""
+    """將類別的所有方法註冊為工具。"""
     if include_private:
         funcs = [
             func

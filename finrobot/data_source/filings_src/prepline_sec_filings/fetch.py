@@ -1,4 +1,4 @@
-"""Module for fetching data from the SEC EDGAR Archives"""
+"""從 SEC EDGAR Archives 擷取資料的模組"""
 
 import json
 import os
@@ -26,9 +26,8 @@ SEC_SUBMISSIONS_URL = "https://data.sec.gov/submissions"
 def get_filing(
     accession_number: Union[str, int], cik: Union[str, int], company: str, email: str
 ) -> str:
-    """Fetches the specified filing from the SEC EDGAR Archives. Conforms to the rate
-    limits specified on the SEC website.
-    ref: https://www.sec.gov/os/accessing-edgar-data"""
+    """從 SEC EDGAR Archives 擷取指定的申報文件。遵循 SEC 網站上指定的速率限制。
+    參考：https://www.sec.gov/os/accessing-edgar-data"""
 
     session = _get_session(company, email)
     return _get_filing(session, cik, accession_number)
@@ -39,7 +38,7 @@ def get_filing(
 def _get_filing(
     session: requests.Session, cik: Union[str, int], accession_number: Union[str, int]
 ) -> str:
-    """Wrapped so filings can be retrieved with an existing session."""
+    """包裝後，即可使用現有會話擷取申報文件。"""
     url = archive_url(cik, accession_number)
     # headers = {
     # 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -58,7 +57,7 @@ def _get_filing(
 @sleep_and_retry
 @limits(calls=2, period=1)
 def get_cik_by_ticker(ticker: str) -> str:
-    """Gets a CIK number from a stock ticker by running a search on the SEC website."""
+    """透過在 SEC 網站上執行搜尋，從股票代碼取得 CIK 號碼。"""
     cik_re = re.compile(r".*CIK=(\d{10}).*")
     url = _search_url(ticker)
     headers = {
@@ -70,7 +69,7 @@ def get_cik_by_ticker(ticker: str) -> str:
     # 'accept-language': 'en-US,en;q=0.9',
     # 'cache-control': 'max-age=0',
     # 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
-    # # Add more headers as needed
+    # # 視需要新增更多標頭
     # }
     company = "Indiana-University-Bloomington"
     email = "athecolab@gmail.com"
@@ -89,7 +88,7 @@ def get_cik_by_ticker(ticker: str) -> str:
 @sleep_and_retry
 @limits(calls=10, period=1)
 def get_forms_by_cik(session: requests.Session, cik: Union[str, int]) -> dict:
-    """Gets retrieves dict of recent SEC form filings for a given cik number."""
+    """取得指定 CIK 號碼的最近 SEC 表格申報字典。"""
     json_name = f"CIK{cik}.json"
     response = session.get(f"{SEC_SUBMISSIONS_URL}/{json_name}")
     response.raise_for_status()
@@ -104,13 +103,12 @@ def get_forms_by_cik(session: requests.Session, cik: Union[str, int]) -> dict:
 def _get_recent_acc_num_by_cik(
     session: requests.Session, cik: Union[str, int], form_types: List[str]
 ) -> Tuple[str, str]:
-    """Returns accession number and form type for the most recent filing for one of the
-    given form_types (AKA filing types) for a given cik."""
+    """傳回指定 CIK 的其中一種指定 form_types (又稱申報類型) 的最新申報的存取號碼和表格類型。"""
     retrieved_form_types = get_forms_by_cik(session, cik)
     for acc_num, form_type_ in retrieved_form_types.items():
         if form_type_ in form_types:
             return _drop_dashes(acc_num), form_type_
-    raise ValueError(f"No filings found for {cik}, looking for any of: {form_types}")
+    raise ValueError(f"找不到 {cik} 的申報，正在尋找任何：{form_types}")
 
 
 def get_recent_acc_by_cik(
@@ -119,8 +117,8 @@ def get_recent_acc_by_cik(
     company: Optional[str] = None,
     email: Optional[str] = None,
 ) -> Tuple[str, str]:
-    """Returns (accession_number, retrieved_form_type) for the given cik and form_type.
-    The retrieved_form_type may be an amended version of requested form_type, e.g. 10-Q/A for 10-Q.
+    """傳回指定 CIK 和 form_type 的 (accession_number, retrieved_form_type)。
+    retrieved_form_type 可能是所要求 form_type 的修訂版本，例如 10-Q 的 10-Q/A。
     """
     session = _get_session(company, email)
     return _get_recent_acc_num_by_cik(session, cik, _form_types(form_type))
@@ -132,8 +130,8 @@ def get_recent_cik_and_acc_by_ticker(
     company: Optional[str] = None,
     email: Optional[str] = None,
 ) -> Tuple[str, str, str]:
-    """Returns (cik, accession_number, retrieved_form_type) for the given ticker and form_type.
-    The retrieved_form_type may be an amended version of requested form_type, e.g. 10-Q/A for 10-Q.
+    """傳回指定股票代碼和表格類型的 (cik, accession_number, retrieved_form_type)。
+    retrieved_form_type 可能是所要求表格類型的修訂版本，例如 10-Q 的 10-Q/A。
     """
     session = _get_session(company, email)
     cik = get_cik_by_ticker(session, ticker)
@@ -150,7 +148,7 @@ def get_form_by_ticker(
     company: Optional[str] = None,
     email: Optional[str] = None,
 ) -> str:
-    """For a given ticker, gets the most recent form of a given form_type."""
+    """對於指定的股票代碼，取得指定表格類型的最新表格。"""
     session = _get_session(company, email)
     cik = get_cik_by_ticker(session, ticker)
     return get_form_by_cik(
@@ -163,7 +161,7 @@ def get_form_by_ticker(
 
 
 def _form_types(form_type: str, allow_amended_filing: Optional[bool] = True):
-    """Potentialy expand to include amended filing, e.g.:
+    """可能擴展以包含修訂後的申報，例如：
     "10-Q" -> "10-Q/A"
     """
     assert form_type in VALID_FILING_TYPES
@@ -180,9 +178,9 @@ def get_form_by_cik(
     company: Optional[str] = None,
     email: Optional[str] = None,
 ) -> str:
-    """For a given CIK, returns the most recent form of a given form_type. By default
-    an amended version of the form_type may be retrieved (allow_amended_filing=True).
-    E.g., if form_type is "10-Q", the retrived form could be a 10-Q or 10-Q/A.
+    """對於指定的 CIK，傳回指定表格類型的最新表格。預設情況下，
+    可以擷取表格類型的修訂版本 (allow_amended_filing=True)。
+    例如，如果 form_type 為 "10-Q"，則擷取的表格可以是 10-Q 或 10-Q/A。
     """
     session = _get_session(company, email)
     acc_num, _ = _get_recent_acc_num_by_cik(
@@ -193,8 +191,7 @@ def get_form_by_cik(
 
 
 def open_form(cik, acc_num):
-    """For a given cik and accession number, opens the index page in default browser for the
-    associated SEC form"""
+    """對於指定的 CIK 和存取號碼，在預設瀏覽器中開啟相關 SEC 表格的索引頁面"""
     acc_num = _drop_dashes(acc_num)
     webbrowser.open_new_tab(
         f"{SEC_ARCHIVE_URL}/{cik}/{acc_num}/{_add_dashes(acc_num)}-index.html"
@@ -208,8 +205,7 @@ def open_form_by_ticker(
     company: Optional[str] = None,
     email: Optional[str] = None,
 ):
-    """For a given ticker, opens the index page in default browser for the most recent form of a
-    given form_type."""
+    """對於指定的股票代碼，在預設瀏覽器中開啟指定表格類型的最新表格的索引頁面。"""
     session = _get_session(company, email)
     cik = get_cik_by_ticker(session, ticker)
     acc_num, _ = _get_recent_acc_num_by_cik(
@@ -219,8 +215,8 @@ def open_form_by_ticker(
 
 
 def archive_url(cik: Union[str, int], accession_number: Union[str, int]) -> str:
-    """Builds the archive URL for the SEC accession number. Looks for the .txt file for the
-    filing, while follows a {accession_number}.txt format."""
+    """建立 SEC 存取號碼的封存 URL。尋找申報的 .txt 檔案，
+    其格式為 {accession_number}.txt。"""
     filename = f"{_add_dashes(accession_number)}.txt"
     accession_number = _drop_dashes(accession_number)
     return f"{SEC_ARCHIVE_URL}/{cik}/{accession_number}/{filename}"
@@ -233,13 +229,13 @@ def _search_url(cik: Union[str, int]) -> str:
 
 
 def _add_dashes(accession_number: Union[str, int]) -> str:
-    """Adds the dashes back into the accession number"""
+    """將破折號加回存取號碼中"""
     accession_number = str(accession_number)
     return f"{accession_number[:10]}-{accession_number[10:12]}-{accession_number[12:]}"
 
 
 def _drop_dashes(accession_number: Union[str, int]) -> str:
-    """Converts the accession number to the no dash representation."""
+    """將存取號碼轉換為無破折號的表示法。"""
     accession_number = str(accession_number).replace("-", "")
     return accession_number.zfill(18)
 
@@ -248,9 +244,9 @@ def _get_session(
     company: Optional[str] = "Indiana-University-Bloomington",
     email: Optional[str] = "athecolab@gmail.com",
 ) -> requests.Session:
-    """Creates a requests sessions with the appropriate headers set. If these headers are not
-    set, SEC will reject your request.
-    ref: https://www.sec.gov/os/accessing-edgar-data"""
+    """建立一個設定了適當標頭的 requests 會話。如果未設定這些標頭，
+    SEC 將拒絕您的請求。
+    參考：https://www.sec.gov/os/accessing-edgar-data"""
     if company is None:
         company = os.environ.get("SEC_API_ORGANIZATION")
     if email is None:

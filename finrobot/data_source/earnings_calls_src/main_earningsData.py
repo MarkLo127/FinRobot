@@ -53,38 +53,38 @@ def get_earnings_all_quarters_data(quarter: str, ticker: str, year: int):
 def get_earnings_all_docs(ticker: str, year: int):
     earnings_docs = []
     earnings_call_quarter_vals = []
-    print("Earnings Call Q1")
+    print("第一季度財報電話會議")
     try:
         docs, speakers_list_1 = get_earnings_all_quarters_data("Q1", ticker, year)
         earnings_call_quarter_vals.append("Q1")
         earnings_docs.extend(docs)
     except RetryError:
-        print(f"Don't have the data for Q1")
+        print(f"沒有第一季度的資料")
         speakers_list_1 = []
 
-    print("Earnings Call Q2")
+    print("第二季度財報電話會議")
     try:
         docs, speakers_list_2 = get_earnings_all_quarters_data("Q2", ticker, year)
         earnings_call_quarter_vals.append("Q2")
         earnings_docs.extend(docs)
     except RetryError:
-        print(f"Don't have the data for Q2")
+        print(f"沒有第二季度的資料")
         speakers_list_2 = []
-    print("Earnings Call Q3")
+    print("第三季度財報電話會議")
     try:
         docs, speakers_list_3 = get_earnings_all_quarters_data("Q3", ticker, year)
         earnings_call_quarter_vals.append("Q3")
         earnings_docs.extend(docs)
     except RetryError:
-        print(f"Don't have the data for Q3")
+        print(f"沒有第三季度的資料")
         speakers_list_3 = []
-    print("Earnings Call Q4")
+    print("第四季度財報電話會議")
     try:
         docs, speakers_list_4 = get_earnings_all_quarters_data("Q4", ticker, year)
         earnings_call_quarter_vals.append("Q4")
         earnings_docs.extend(docs)
     except RetryError:
-        print(f"Don't have the data for Q4")
+        print(f"沒有第四季度的資料")
         speakers_list_4 = []
     return (
         earnings_docs,

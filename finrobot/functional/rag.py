@@ -2,12 +2,12 @@ from autogen.agentchat.contrib.retrieve_user_proxy_agent import RetrieveUserProx
 from typing import Annotated
 
 
-PROMPT_RAG_FUNC = """Below is the context retrieved from the required file based on your query.
-If you can't answer the question with or without the current context, you should try using a more refined search query according to your requirements, or ask for more contexts.
+PROMPT_RAG_FUNC = """以下是根據您的查詢從所需檔案中擷取的內容。
+如果您無法在有或沒有目前內容的情況下回答問題，您應該嘗試根據您的需求使用更精確的搜尋查詢，或要求更多內容。
 
-Your current query is: {input_question}
+您目前的查詢是：{input_question}
 
-Retrieved context is: {input_context}
+擷取的內容是：{input_context}
 """
 
 
@@ -26,24 +26,24 @@ def get_rag_function(retrieve_config, description=""):
         name="RAG_Assistant",
         is_termination_msg=termination_msg,
         human_input_mode="NEVER",
-        default_auto_reply="Reply `TERMINATE` if the task is done.",
+        default_auto_reply="如果任務完成，請回覆 `TERMINATE`。",
         max_consecutive_auto_reply=3,
         retrieve_config=retrieve_config,
-        code_execution_config=False,  # we don't want to execute code in this case.
-        description="Assistant who has extra content retrieval power for solving difficult problems.",
+        code_execution_config=False,  # 在這種情況下我們不想執行程式碼。
+        description="擁有額外內容擷取能力以解決難題的助理。",
     )
 
     def retrieve_content(
         message: Annotated[
             str,
-            "Refined query message which keeps the original meaning and can be used to retrieve content for code generation or question answering from the provided files."
-            "For example, 'YoY comparisons of profit margin', 'risk factors of NVIDIA in Q4', 'retrieve historical stock price data using YFinance'",
+            "精簡的查詢訊息，保留原始意義，可用於從提供的檔案中擷取內容以進行程式碼產生或問答。"
+            "例如，'利潤率的年比比較'、'第四季 NVIDIA 的風險因素'、'使用 YFinance 擷取歷史股價資料'",
         ],
-        n_results: Annotated[int, "Number of results to retrieve, default to 3"] = 3,
+        n_results: Annotated[int, "要擷取的結果數，預設為 3"] = 3,
     ) -> str:
 
-        rag_assitant.n_results = n_results  # Set the number of results to be retrieved.
-        # Check if we need to update the context.
+        rag_assitant.n_results = n_results  # 設定要擷取的結果數。
+        # 檢查我們是否需要更新內容。
         update_context_case1, update_context_case2 = rag_assitant._check_update_context(
             message
         )
@@ -64,10 +64,10 @@ def get_rag_function(retrieve_config, description=""):
     if description:
         retrieve_content.__doc__ = description
     else:
-        retrieve_content.__doc__ = "retrieve content from documents to assist question answering or code generation."
+        retrieve_content.__doc__ = "從文件中擷取內容以協助問答或程式碼產生。"
         docs = retrieve_config.get("docs_path", [])
         if docs:
             docs_str = "\n".join(docs if isinstance(docs, list) else [docs])
-            retrieve_content.__doc__ += f"Availale Documents:\n{docs_str}"
+            retrieve_content.__doc__ += f"可用文件：\n{docs_str}"
 
-    return retrieve_content, rag_assitant  # for debug use
+    return retrieve_content, rag_assitant  # 用於除錯

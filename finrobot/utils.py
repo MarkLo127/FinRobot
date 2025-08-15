@@ -5,9 +5,9 @@ from datetime import date, timedelta, datetime
 from typing import Annotated
 
 
-# Define custom annotated types
-# VerboseType = Annotated[bool, "Whether to print data to console. Default to True."]
-SavePathType = Annotated[str, "File path to save data. If None, data is not saved."]
+# 定義自訂註解類型
+# VerboseType = Annotated[bool, "是否將資料列印到主控台。預設為 True。"]
+SavePathType = Annotated[str, "儲存資料的檔案路徑。如果為 None，則不儲存資料。"]
 
 
 # def process_output(data: pd.DataFrame, tag: str, verbose: VerboseType = True, save_path: SavePathType = None) -> None:
@@ -15,13 +15,13 @@ SavePathType = Annotated[str, "File path to save data. If None, data is not save
 #         print(data.to_string())
 #     if save_path:
 #         data.to_csv(save_path)
-#         print(f"{tag} saved to {save_path}")
+#         print(f"{tag} 已儲存至 {save_path}")
 
 
 def save_output(data: pd.DataFrame, tag: str, save_path: SavePathType = None) -> None:
     if save_path:
         data.to_csv(save_path)
-        print(f"{tag} saved to {save_path}")
+        print(f"{tag} 已儲存至 {save_path}")
 
 
 def get_current_date():

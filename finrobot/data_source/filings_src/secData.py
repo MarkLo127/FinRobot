@@ -30,13 +30,13 @@ def sec_main(
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     }
-    # Send a GET request to the URL with headers
+    # 向帶有標頭的 URL 發送 GET 請求
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
         json_data = response.json()
     else:
-        print(f"Error: Unable to fetch data. Status code: {response.status_code}")
+        print(f"錯誤：無法擷取資料。狀態碼：{response.status_code}")
 
     form_lists = []
     filings = json_data["filings"]
@@ -74,7 +74,7 @@ def sec_main(
         email="support@unstructured.io",
     )
     sec_extractor = SECExtractor(ticker=ticker)
-    print("Started Scraping")
+    print("已開始抓取")
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         results = executor.map(get_filing_partial, acc_nums_list)
     results_texts = []
@@ -83,9 +83,9 @@ def sec_main(
             results_texts.append(res)
     assert len(results_texts) == len(
         acc_nums_list
-    ), f"The scraped text {len(results_texts)} is not matching with accession number texts {len(acc_nums_list)}"
-    print("Scraped")
-    print("Started Extracting")
+    ), f"抓取的文本 {len(results_texts)} 與存取號碼文本 {len(acc_nums_list)} 不符"
+    print("已抓取")
+    print("已開始擷取")
     with concurrent.futures.ProcessPoolExecutor(max_workers=4) as executor:
         results = executor.map(sec_extractor.get_section_texts_from_text, results_texts)
     section_texts = []
@@ -93,9 +93,9 @@ def sec_main(
         section_texts.append(res)
     assert len(section_texts) == len(
         acc_nums_list
-    ), f"The section text {len(section_texts)} is not matching with accession number texts {len(acc_nums_list)}"
+    ), f"章節文本 {len(section_texts)} 與存取號碼文本 {len(acc_nums_list)} 不符"
 
-    print("Extracted")
+    print("已擷取")
     docs = []
     for idx, val in enumerate(form_lists):
         # val['sec_texts'] = section_texts[idx]

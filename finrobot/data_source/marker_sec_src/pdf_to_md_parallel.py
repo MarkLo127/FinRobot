@@ -1,10 +1,10 @@
 import os
 
-os.environ["IN_STREAMLIT"] = "true"  # Avoid multiprocessing inside surya
-os.environ["PDFTEXT_CPU_WORKERS"] = "1"  # Avoid multiprocessing inside pdftext
+os.environ["IN_STREAMLIT"] = "true"  # 避免在 surya 內部進行多重處理
+os.environ["PDFTEXT_CPU_WORKERS"] = "1"  # 避免在 pdftext 內部進行多重處理
 SAVE_DIR = "output/SEC_EDGAR_FILINGS_MD"
 
-import pypdfium2  # Needs to be at the top to avoid warnings
+import pypdfium2  # 必須放在最前面以避免警告
 from typing import Optional
 import torch.multiprocessing as mp
 from tqdm import tqdm
@@ -42,9 +42,9 @@ def process_single_pdf(args):
     if not filepath.endswith("pdf"): 
         return
     try:
-        # Skip trying to convert files that don't have a lot of embedded text
-        # This can indicate that they were scanned, and not OCRed properly
-        # Usually these files are not recent/high-quality
+        # 跳過轉換沒有太多嵌入文字的檔案
+        # 這可能表示它們是掃描的，而且沒有正確地進行光學字元辨識
+        # 通常這些檔案不是最近的/高品質的
         if min_length:
             filetype = find_filetype(filepath)
             if filetype == "other":
@@ -60,9 +60,9 @@ def process_single_pdf(args):
         if len(full_text.strip()) > 0:
             save_markdown(out_folder, fname, full_text, images, out_metadata)
         else:
-            print(f"Empty file: {filepath}.  Could not convert.")
+            print(f"空檔案：{filepath}。無法轉換。")
     except Exception as e:
-        print(f"Error converting {filepath}: {e}")
+        print(f"轉換 {filepath} 時發生錯誤：{e}")
         print(traceback.format_exc())
 
 
@@ -79,25 +79,25 @@ def run_marker_mp(
     vram_per_task: Optional[int] = None,
 ):
     """
-    Convert multiple PDFs to markdown using the provided parameters.
+    使用提供的參數將多個 PDF 轉換為 markdown。
 
-    Parameters:
+    參數：
     - in_folder: str
-        Input folder containing PDF files.
+        包含 PDF 檔案的輸入資料夾。
     - out_folder: str
-        Output folder where markdown files will be saved.
+        將儲存 markdown 檔案的輸出資料夾。
     - chunk_idx: int, optional
-        Chunk index to convert. Default is 0.
+        要轉換的區塊索引。預設為 0。
     - num_chunks: int, optional
-        Number of chunks being processed in parallel. Default is 1.
+        平行處理的區塊數。預設為 1。
     - max_files: int, optional
-        Maximum number of PDFs to convert. Default is None (no limit).
+        要轉換的 PDF 檔案數上限。預設為 None (無限制)。
     - workers: int, optional
-        Number of worker processes to use. Default is 5.
+        要使用的背景工作處理程序數。預設為 5。
     - metadata_file: str, optional
-        Path to metadata JSON file for filtering. Default is None.
+        用於篩選的元數據 JSON 檔案路徑。預設為 None。
     - min_length: int, optional
-        Minimum length of PDF to convert. Default is None.
+        要轉換的 PDF 最小長度。預設為 None。
     """
 
     in_folder = os.path.abspath(in_folder)
@@ -106,14 +106,14 @@ def run_marker_mp(
     files = [f for f in files if os.path.isfile(f)]
     os.makedirs(out_folder, exist_ok=True)
 
-    # Handle chunks if we're processing in parallel
-    # Ensure we get all files into a chunk
+    # 如果我們正在平行處理，則處理區塊
+    # 確保我們將所有檔案都放入一個區塊中
     chunk_size = math.ceil(len(files) / num_chunks)
     start_idx = chunk_idx * chunk_size
     end_idx = start_idx + chunk_size
     files_to_convert = files[start_idx:end_idx]
 
-    # Limit files converted if needed
+    # 如果需要，限制轉換的檔案
     if max:
         files_to_convert = files_to_convert[:max_files]
 
@@ -125,7 +125,7 @@ def run_marker_mp(
 
     total_processes = min(len(files_to_convert), workers)
 
-    # Dynamically set GPU allocation per task based on GPU ram
+    # 根據 GPU ram 動態設定每個任務的 GPU 分配
     if inference_ram is not None:
         settings.INFERENCE_RAM = inference_ram
     if vram_per_task is not None:
@@ -139,7 +139,7 @@ def run_marker_mp(
     else:
         total_processes = int(total_processes)
 
-    mp.set_start_method("spawn")  # Required for CUDA, forkserver doesn't work
+    mp.set_start_method("spawn")  # CUDA 需要，forkserver 無法運作
     model_lst = load_all_models()
 
     for model in model_lst:
@@ -148,13 +148,13 @@ def run_marker_mp(
 
         if model.device.type == "mps":
             raise ValueError(
-                "Cannot use MPS with torch multiprocessing share_memory.  You have to use CUDA or CPU.  Set the TORCH_DEVICE environment variable to change the device."
+                "無法將 MPS 與 torch multiprocessing share_memory 搭配使用。您必須使用 CUDA 或 CPU。請設定 TORCH_DEVICE 環境變數以變更裝置。"
             )
 
         model.share_memory()
 
     print(
-        f"Converting {len(files_to_convert)} pdfs in chunk {chunk_idx + 1}/{num_chunks} with {total_processes} processes, and storing in {out_folder}"
+        f"正在轉換 {len(files_to_convert)} 個 pdf 檔案，在區塊 {chunk_idx + 1}/{num_chunks} 中，使用 {total_processes} 個處理程序，並儲存在 {out_folder}"
     )
     task_args = [
         (f, out_folder, metadata.get(os.path.basename(f)), min_length)
@@ -168,12 +168,12 @@ def run_marker_mp(
             tqdm(
                 pool.imap(process_single_pdf, task_args),
                 total=len(task_args),
-                desc="Processing PDFs",
+                desc="正在處理 PDF",
                 unit="pdf",
             )
         )
 
         pool._worker_handler.terminate = worker_exit
 
-    # Delete all CUDA tensors
+    # 刪除所有 CUDA 張量
     del model_lst

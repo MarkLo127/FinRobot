@@ -7,10 +7,10 @@ from ..utils import save_output, SavePathType, decorate_all_methods
 
 
 def init_ticker(func: Callable) -> Callable:
-    """Decorator to initialize yf.Ticker and pass it to the function."""
+    """裝飾器，用於初始化 yf.Ticker 並將其傳遞給函式。"""
 
     @wraps(func)
-    def wrapper(symbol: Annotated[str, "ticker symbol"], *args, **kwargs) -> Any:
+    def wrapper(symbol: Annotated[str, "股票代碼"], *args, **kwargs) -> Any:
         ticker = yf.Ticker(symbol)
         return func(ticker, *args, **kwargs)
 
@@ -21,90 +21,90 @@ def init_ticker(func: Callable) -> Callable:
 class YFinanceUtils:
 
     def get_stock_data(
-        symbol: Annotated[str, "ticker symbol"],
+        symbol: Annotated[str, "股票代碼"],
         start_date: Annotated[
-            str, "start date for retrieving stock price data, YYYY-mm-dd"
+            str, "擷取股價資料的開始日期，格式為 YYYY-mm-dd"
         ],
         end_date: Annotated[
-            str, "end date for retrieving stock price data, YYYY-mm-dd"
+            str, "擷取股價資料的結束日期，格式為 YYYY-mm-dd"
         ],
         save_path: SavePathType = None,
     ) -> DataFrame:
-        """retrieve stock price data for designated ticker symbol"""
+        """擷取指定股票代碼的股價資料"""
         ticker = symbol
         stock_data = ticker.history(start=start_date, end=end_date)
-        save_output(stock_data, f"Stock data for {ticker.ticker}", save_path)
+        save_output(stock_data, f"{ticker.ticker} 的股價資料", save_path)
         return stock_data
 
     def get_stock_info(
-        symbol: Annotated[str, "ticker symbol"],
+        symbol: Annotated[str, "股票代碼"],
     ) -> dict:
-        """Fetches and returns latest stock information."""
+        """擷取並傳回最新的股票資訊。"""
         ticker = symbol
         stock_info = ticker.info
         return stock_info
 
     def get_company_info(
-        symbol: Annotated[str, "ticker symbol"],
+        symbol: Annotated[str, "股票代碼"],
         save_path: Optional[str] = None,
     ) -> DataFrame:
-        """Fetches and returns company information as a DataFrame."""
+        """擷取並以 DataFrame 格式傳回公司資訊。"""
         ticker = symbol
         info = ticker.info
         company_info = {
-            "Company Name": info.get("shortName", "N/A"),
-            "Industry": info.get("industry", "N/A"),
-            "Sector": info.get("sector", "N/A"),
-            "Country": info.get("country", "N/A"),
-            "Website": info.get("website", "N/A"),
+            "公司名稱": info.get("shortName", "N/A"),
+            "產業": info.get("industry", "N/A"),
+            "產業別": info.get("sector", "N/A"),
+            "國家": info.get("country", "N/A"),
+            "網站": info.get("website", "N/A"),
         }
         company_info_df = DataFrame([company_info])
         if save_path:
             company_info_df.to_csv(save_path)
-            print(f"Company info for {ticker.ticker} saved to {save_path}")
+            print(f"{ticker.ticker} 的公司資訊已儲存至 {save_path}")
         return company_info_df
 
     def get_stock_dividends(
-        symbol: Annotated[str, "ticker symbol"],
+        symbol: Annotated[str, "股票代碼"],
         save_path: Optional[str] = None,
     ) -> DataFrame:
-        """Fetches and returns the latest dividends data as a DataFrame."""
+        """擷取並以 DataFrame 格式傳回最新的股利資料。"""
         ticker = symbol
         dividends = ticker.dividends
         if save_path:
             dividends.to_csv(save_path)
-            print(f"Dividends for {ticker.ticker} saved to {save_path}")
+            print(f"{ticker.ticker} 的股利已儲存至 {save_path}")
         return dividends
 
-    def get_income_stmt(symbol: Annotated[str, "ticker symbol"]) -> DataFrame:
-        """Fetches and returns the latest income statement of the company as a DataFrame."""
+    def get_income_stmt(symbol: Annotated[str, "股票代碼"]) -> DataFrame:
+        """擷取並以 DataFrame 格式傳回公司最新的損益表。"""
         ticker = symbol
         income_stmt = ticker.financials
         return income_stmt
 
-    def get_balance_sheet(symbol: Annotated[str, "ticker symbol"]) -> DataFrame:
-        """Fetches and returns the latest balance sheet of the company as a DataFrame."""
+    def get_balance_sheet(symbol: Annotated[str, "股票代碼"]) -> DataFrame:
+        """擷取並以 DataFrame 格式傳回公司最新的資產負債表。"""
         ticker = symbol
         balance_sheet = ticker.balance_sheet
         return balance_sheet
 
-    def get_cash_flow(symbol: Annotated[str, "ticker symbol"]) -> DataFrame:
-        """Fetches and returns the latest cash flow statement of the company as a DataFrame."""
+    def get_cash_flow(symbol: Annotated[str, "股票代碼"]) -> DataFrame:
+        """擷取並以 DataFrame 格式傳回公司最新的現金流量表。"""
         ticker = symbol
         cash_flow = ticker.cashflow
         return cash_flow
 
-    def get_analyst_recommendations(symbol: Annotated[str, "ticker symbol"]) -> tuple:
-        """Fetches the latest analyst recommendations and returns the most common recommendation and its count."""
+    def get_analyst_recommendations(symbol: Annotated[str, "股票代碼"]) -> tuple:
+        """擷取最新的分析師建議，並傳回最常見的建議及其計數。"""
         ticker = symbol
         recommendations = ticker.recommendations
         if recommendations.empty:
-            return None, 0  # No recommendations available
+            return None, 0  # 無可用建議
 
-        # Assuming 'period' column exists and needs to be excluded
-        row_0 = recommendations.iloc[0, 1:]  # Exclude 'period' column if necessary
+        # 假設 'period' 欄位存在且需要排除
+        row_0 = recommendations.iloc[0, 1:]  # 如有必要，排除 'period' 欄位
 
-        # Find the maximum voting result
+        # 尋找最大投票結果
         max_votes = row_0.max()
         majority_voting_result = row_0[row_0 == max_votes].index.tolist()
 

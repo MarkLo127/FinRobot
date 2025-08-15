@@ -18,7 +18,7 @@ def rag_database_earnings_call(
         ticker: str,
         year: str)->str:
         
-        #assert quarter in earnings_call_quarter_vals, "The quarter should be from Q1, Q2, Q3, Q4"
+        #assert quarter in earnings_call_quarter_vals, "季度應為 Q1、Q2、Q3、Q4"
         earnings_docs, earnings_call_quarter_vals, speakers_list_1, speakers_list_2, speakers_list_3, speakers_list_4 = get_data(ticker=ticker,year=year,data_source='earnings_calls')
 
         emb_fn = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
@@ -41,18 +41,16 @@ def rag_database_earnings_call(
         def query_database_earnings_call(
         question: str,
         quarter: str)->str:
-            """This tool will query the earnings call transcripts database for a given question and quarter and it will retrieve
-            the relevant text along from the earnings call and the speaker who addressed the relevant documents. This tool helps in answering questions
-            from the earnings call transcripts.
+            """此工具將針對給定的問題和季度查詢財報電話會議記錄資料庫，並從財報電話會議記錄和發言人中擷取相關文本，以回答財報電話會議記錄中的問題。
 
             Args:
-            question (str): _description_. Question to query the database for relevant documents.
-            quarter (str): _description_. the financial quarter that is discussed in the question and possible options are Q1, Q2, Q3, Q4
+            question (str): _description_. 用於查詢資料庫以取得相關文件的問題。
+            quarter (str): _description_. 問題中討論的財務季度，可能的選項為 Q1、Q2、Q3、Q4
 
             Returns:
-            str: relevant text along from the earnings call and the speaker who addressed the relevant documents
+            str: 財報電話會議記錄中的相關文本以及處理相關文件的發言人
             """
-            assert quarter in earnings_call_quarter_vals, "The quarter should be from Q1, Q2, Q3, Q4"
+            assert quarter in earnings_call_quarter_vals, "季度應為 Q1、Q2、Q3、Q4"
 
             req_speaker_list = []
             quarter_speaker_list = quarter_speaker_dict[quarter]
@@ -119,18 +117,16 @@ def rag_database_sec(
         sec_filings_unstructured_db = Chroma.from_documents(sec_filings_split_docs, emb_fn, persist_directory="./sec-filings-db",collection_name="sec_filings")
     
         def query_database_unstructured_sec(question: str,sec_form_name: str)->str:
-            """This tool will query the SEC Filings database for a given question and form name, and it will retrieve
-            the relevant text along from the SEC filings and the section names. This tool helps in answering questions
-            from the sec filings.
+            """此工具將針對給定的問題和表格名稱查詢 SEC 申報資料庫，並從 SEC 申報和章節名稱中擷取相關文本。此工具有助於回答 SEC 申報中的問題。
 
             Args:
-            question (str): _description_. Question to query the database for relevant documents
-            sec_form_name (str): _description_. SEC FORM NAME that the question is talking about. It can be 10-K for yearly data and 10-Q for quarterly data. For quarterly data, it can be 10-Q2 to represent Quarter 2 and similarly for other quarters.
+            question (str): _description_. 用於查詢資料庫以取得相關文件的問題
+            sec_form_name (str): _description_. 問題所指的 SEC 表格名稱。年度資料可以是 10-K，季度資料可以是 10-Q。對於季度資料，可以是 10-Q2 來表示第二季，其他季度以此類推。
             
            
 
             Returns:
-            str: Relevant context for the question from the sec filings
+            str: SEC 申報中問題的相關內容
             """
             relevant_docs = sec_filings_unstructured_db.similarity_search(
             question,
@@ -187,20 +183,18 @@ def rag_database_sec(
         def query_database_markdown_sec(
             question: str,
             sec_form_name: str)->str:
-            """This tool will query the SEC Filings database for a given question and form name, and it will retrieve
-            the relevant text along from the SEC filings and the section names. This tool helps in answering questions
-            from the sec filings.
+            """此工具將針對給定的問題和表格名稱查詢 SEC 申報資料庫，並從 SEC 申報和章節名稱中擷取相關文本。此工具有助於回答 SEC 申報中的問題。
 
             Args:
-            question (str): _description_. Question to query the database for relevant documents
-            sec_form_name (str): _description_. SEC FORM NAME that the question is talking about. It can be 10-K for yearly data and 10-Q for quarterly data. For quarterly data, it can be 10-Q2 to represent Quarter 2 and similarly for other quarters.
+            question (str): _description_. 用於查詢資料庫以取得相關文件的問題
+            sec_form_name (str): _description_. 問題所指的 SEC 表格名稱。年度資料可以是 10-K，季度資料可以是 10-Q。對於季度資料，可以是 10-Q2 來表示第二季，其他季度以此類推。
             
            
 
             Returns:
-            str: Relevant context for the question from the sec filings
+            str: SEC 申報中問題的相關內容
             """
-            assert sec_form_name in sec_form_names, f'The search form type should be in {sec_form_names}'
+            assert sec_form_name in sec_form_names, f'搜尋表格類型應為 {sec_form_names}'
 
             relevant_docs = sec_filings_md_db.similarity_search(
             question,

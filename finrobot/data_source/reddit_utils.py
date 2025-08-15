@@ -14,7 +14,7 @@ def init_reddit_client(func):
         if not all(
             [os.environ.get("REDDIT_CLIENT_ID"), os.environ.get("REDDIT_CLIENT_SECRET")]
         ):
-            print("Please set the environment variables for Reddit API credentials.")
+            print("請設定 Reddit API 憑證的環境變數。")
             return None
         else:
             reddit_client = praw.Reddit(
@@ -22,7 +22,7 @@ def init_reddit_client(func):
                 client_secret=os.environ["REDDIT_CLIENT_SECRET"],
                 user_agent="python:finrobot:v0.1 (by /u/finrobot)",
             )
-            print("Reddit client initialized")
+            print("Reddit 客戶端已初始化")
             return func(*args, **kwargs)
 
     return wrapper
@@ -33,21 +33,21 @@ class RedditUtils:
 
     def get_reddit_posts(
         query: Annotated[
-            str, "Search query, e.g. 'AAPL OR Apple Inc OR #AAPL OR (Apple AND stock)'"
+            str, "搜尋查詢，例如 'AAPL OR Apple Inc OR #AAPL OR (Apple AND stock)'"
         ],
-        start_date: Annotated[str, "Start date in yyyy-mm-dd format"],
-        end_date: Annotated[str, "End date in yyyy-mm-dd format"],
+        start_date: Annotated[str, "開始日期，格式為 yyyy-mm-dd"],
+        end_date: Annotated[str, "結束日期，格式為 yyyy-mm-dd"],
         limit: Annotated[
-            int, "Maximum number of posts to fetch, default to 1000"
+            int, "要擷取的貼文數量上限，預設為 1000"
         ] = 1000,
         selected_columns: Annotated[
             List[str],
-            "Columns to contain in the result, should be chosen from 'created_utc', 'id', 'title', 'selftext', 'score', 'num_comments', 'url', default to ['created_utc', 'title', 'score', 'num_comments']",
+            "結果中要包含的欄位，應從 'created_utc', 'id', 'title', 'selftext', 'score', 'num_comments', 'url' 中選擇，預設為 ['created_utc', 'title', 'score', 'num_comments']",
         ] = ["created_utc", "title", "score", "num_comments"],
         save_path: SavePathType = None,
     ) -> pd.DataFrame:
         """
-        Get Reddit posts from r/wallstreetbets & r/stocks & r/investing based on the search query and date range.
+        根據搜尋查詢和日期範圍，從 r/wallstreetbets、r/stocks 和 r/investing 取得 Reddit 貼文。
         """
 
         post_data = []
@@ -64,7 +64,7 @@ class RedditUtils:
         )
 
         for subreddit_name in ["wallstreetbets", "stocks", "investing"]:
-            print("Searching in subreddit:", subreddit_name)
+            print("正在搜尋子版面：", subreddit_name)
             subreddit = reddit_client.subreddit(subreddit_name)
             posts = subreddit.search(query, limit=limit)
 
@@ -98,12 +98,12 @@ class RedditUtils:
         )
         output = output[selected_columns]
 
-        save_output(output, f"reddit posts related to {query}", save_path=save_path)
+        save_output(output, f"與 {query} 相關的 reddit 貼文", save_path=save_path)
 
         return output
 
 
-# Example usage
+# 範例用法
 if __name__ == "__main__":
 
     from finrobot.utils import register_keys_from_json

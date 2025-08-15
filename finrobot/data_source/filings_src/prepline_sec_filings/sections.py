@@ -1,4 +1,4 @@
-"""Module for defining/enumerating the common sections from SEC forms"""
+"""定義/列舉 SEC 表格中常見章節的模組"""
 
 from enum import Enum
 import re
@@ -55,8 +55,8 @@ class SECSection(Enum):
     ACCOUNTING_FEES = r"accounting fees"
     EXHIBITS = r"^exhibits?(.*financial statement schedules)?$"
     FORM_SUMMARY = r"^form .*summary$"
-    # NOTE(yuming): Additional section titles used in test_real_examples.py,
-    # maybe change this when custom regex string param is allowed.
+    # 注意(yuming)：在 test_real_examples.py 中使用的其他章節標題，
+    # 當允許自訂 regex 字串參數時，可能會變更此項。
     CERTAIN_TRADEMARKS = r"certain trademarks"
     OFFER_PRICE = r"(?:determination of )offering price"
 
@@ -69,48 +69,48 @@ ALL_SECTIONS = "_ALL"
 
 section_string_to_enum = {enum.name: enum for enum in SECSection}
 
-# NOTE(robinson) - Sections are listed in the following document from SEC
-# ref: https://www.sec.gov/files/form10-k.pdf
+# 注意(robinson) - 章節列在 SEC 的下列文件中
+# 參考：https://www.sec.gov/files/form10-k.pdf
 SECTIONS_10K = (
-    SECSection.BUSINESS,  # ITEM 1
-    SECSection.RISK_FACTORS,  # ITEM 1A
-    SECSection.UNRESOLVED_STAFF_COMMENTS,  # ITEM 1B
-    SECSection.PROPERTIES,  # ITEM 2
-    SECSection.LEGAL_PROCEEDINGS,  # ITEM 3
-    SECSection.MINE_SAFETY,  # ITEM 4
-    SECSection.MARKET_FOR_REGISTRANT_COMMON_EQUITY,  # ITEM 5
-    # NOTE(robinson) - ITEM 6 is "RESERVED"
-    SECSection.MANAGEMENT_DISCUSSION,  # ITEM 7
-    SECSection.MARKET_RISK_DISCLOSURES,  # ITEM 7A
-    SECSection.FINANCIAL_STATEMENTS,  # ITEM 8
-    SECSection.ACCOUNTING_DISAGREEMENTS,  # ITEM 9
-    SECSection.CONTROLS_AND_PROCEDURES,  # ITEM 9A
-    # NOTE(robinson) - ITEM 9B is other information
-    SECSection.FOREIGN_JURISDICTIONS,  # ITEM 9C
-    SECSection.MANAGEMENT,  # ITEM 10
-    SECSection.COMPENSATION,  # ITEM 11
-    SECSection.PRINCIPAL_STOCKHOLDERS,  # ITEM 12
-    SECSection.RELATED_PARTY_TRANSACTIONS,  # ITEM 13
-    SECSection.ACCOUNTING_FEES,  # ITEM 14
-    SECSection.EXHIBITS,  # ITEM 15
-    SECSection.FORM_SUMMARY,  # ITEM 16
+    SECSection.BUSINESS,  # 項目 1
+    SECSection.RISK_FACTORS,  # 項目 1A
+    SECSection.UNRESOLVED_STAFF_COMMENTS,  # 項目 1B
+    SECSection.PROPERTIES,  # 項目 2
+    SECSection.LEGAL_PROCEEDINGS,  # 項目 3
+    SECSection.MINE_SAFETY,  # 項目 4
+    SECSection.MARKET_FOR_REGISTRANT_COMMON_EQUITY,  # 項目 5
+    # 注意(robinson) - 項目 6 為「保留」
+    SECSection.MANAGEMENT_DISCUSSION,  # 項目 7
+    SECSection.MARKET_RISK_DISCLOSURES,  # 項目 7A
+    SECSection.FINANCIAL_STATEMENTS,  # 項目 8
+    SECSection.ACCOUNTING_DISAGREEMENTS,  # 項目 9
+    SECSection.CONTROLS_AND_PROCEDURES,  # 項目 9A
+    # 注意(robinson) - 項目 9B 為其他資訊
+    SECSection.FOREIGN_JURISDICTIONS,  # 項目 9C
+    SECSection.MANAGEMENT,  # 項目 10
+    SECSection.COMPENSATION,  # 項目 11
+    SECSection.PRINCIPAL_STOCKHOLDERS,  # 項目 12
+    SECSection.RELATED_PARTY_TRANSACTIONS,  # 項目 13
+    SECSection.ACCOUNTING_FEES,  # 項目 14
+    SECSection.EXHIBITS,  # 項目 15
+    SECSection.FORM_SUMMARY,  # 項目 16
 )
 
-# NOTE(robinson) - Sections are listed in the following document from SEC
-# ref: https://www.sec.gov/files/form10-q.pdf
+# 注意(robinson) - 章節列在 SEC 的下列文件中
+# 參考：https://www.sec.gov/files/form10-q.pdf
 SECTIONS_10Q = (
-    # Part I - Financial information
-    SECSection.FINANCIAL_STATEMENTS,  # ITEM 1
-    SECSection.MANAGEMENT_DISCUSSION,  # ITEM 2
-    SECSection.MARKET_RISK_DISCLOSURES,  # ITEM 3
-    SECSection.CONTROLS_AND_PROCEDURES,  # ITEM 4
-    # Part II - Other information
-    SECSection.LEGAL_PROCEEDINGS,  # ITEM 1
-    SECSection.RISK_FACTORS,  # ITEM 1A
-    SECSection.USE_OF_PROCEEDS,  # ITEM 2
-    SECSection.DEFAULTS,  # ITEM 3
-    SECSection.MINE_SAFETY,  # ITEM 4
-    SECSection.OTHER_INFORMATION,  # ITEM 5
+    # 第 I 部分 - 財務資訊
+    SECSection.FINANCIAL_STATEMENTS,  # 項目 1
+    SECSection.MANAGEMENT_DISCUSSION,  # 項目 2
+    SECSection.MARKET_RISK_DISCLOSURES,  # 項目 3
+    SECSection.CONTROLS_AND_PROCEDURES,  # 項目 4
+    # 第 II 部分 - 其他資訊
+    SECSection.LEGAL_PROCEEDINGS,  # 項目 1
+    SECSection.RISK_FACTORS,  # 項目 1A
+    SECSection.USE_OF_PROCEEDS,  # 項目 2
+    SECSection.DEFAULTS,  # 項目 3
+    SECSection.MINE_SAFETY,  # 項目 4
+    SECSection.OTHER_INFORMATION,  # 項目 5
 )
 
 SECTIONS_S1 = (
@@ -140,15 +140,15 @@ SECTIONS_S1 = (
 
 
 def validate_section_names(section_names: List[str]):
-    """Return section names that don't correspond to a defined enum."""
+    """傳回與定義的列舉不對應的章節名稱。"""
     if len(section_names) == 1 and section_names[0] == ALL_SECTIONS:
         return None
     elif len(section_names) > 1 and ALL_SECTIONS in section_names:
-        raise ValueError(f"{ALL_SECTIONS} may not be specified with other sections")
+        raise ValueError(f"{ALL_SECTIONS} 不得與其他章節一起指定")
 
     invalid_names = [
         name for name in section_names if name not in section_string_to_enum
     ]
     if invalid_names:
-        raise ValueError(f"The following section names are not valid: {invalid_names}")
+        raise ValueError(f"下列章節名稱無效：{invalid_names}")
     return None

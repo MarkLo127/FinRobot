@@ -16,13 +16,13 @@ def init_sec_api(func):
     def wrapper(*args, **kwargs):
         global extractor_api, query_api, render_api
         if os.environ.get("SEC_API_KEY") is None:
-            print("Please set the environment variable SEC_API_KEY to use sec_api.")
+            print("請設定環境變數 SEC_API_KEY 以使用 sec_api。")
             return None
         else:
             extractor_api = ExtractorApi(os.environ["SEC_API_KEY"])
             query_api = QueryApi(os.environ["SEC_API_KEY"])
             render_api = RenderApi(os.environ["SEC_API_KEY"])
-            print("Sec Api initialized")
+            print("Sec Api 已初始化")
             return func(*args, **kwargs)
 
     return wrapper
@@ -32,16 +32,16 @@ def init_sec_api(func):
 class SECUtils:
 
     def get_10k_metadata(
-        ticker: Annotated[str, "ticker symbol"],
+        ticker: Annotated[str, "股票代碼"],
         start_date: Annotated[
-            str, "start date of the 10-k file search range, in yyyy-mm-dd format"
+            str, "10-k 檔案搜尋範圍的開始日期，格式為 yyyy-mm-dd"
         ],
         end_date: Annotated[
-            str, "end date of the 10-k file search range, in yyyy-mm-dd format"
+            str, "10-k 檔案搜尋範圍的結束日期，格式為 yyyy-mm-dd"
         ],
     ):
         """
-        Search for 10-k filings within a given time period, and return the meta data of the latest one
+        在給定時間段內搜尋 10-k 申報文件，並傳回最新一份的元數據
         """
         query = {
             "query": f'ticker:"{ticker}" AND formType:"10-K" AND filedAt:[{start_date} TO {end_date}]',
@@ -55,18 +55,18 @@ class SECUtils:
         return None
 
     def download_10k_filing(
-        ticker: Annotated[str, "ticker symbol"],
+        ticker: Annotated[str, "股票代碼"],
         start_date: Annotated[
-            str, "start date of the 10-k file search range, in yyyy-mm-dd format"
+            str, "10-k 檔案搜尋範圍的開始日期，格式為 yyyy-mm-dd"
         ],
         end_date: Annotated[
-            str, "end date of the 10-k file search range, in yyyy-mm-dd format"
+            str, "10-k 檔案搜尋範圍的結束日期，格式為 yyyy-mm-dd"
         ],
         save_folder: Annotated[
-            str, "name of the folder to store the downloaded filing"
+            str, "儲存下載申報文件的資料夾名稱"
         ],
     ) -> str:
-        """Download the latest 10-K filing as htm for a given ticker within a given time period."""
+        """在給定時間段內下載指定股票代碼的最新 10-K 申報文件 (htm)。"""
         metadata = SECUtils.get_10k_metadata(ticker, start_date, end_date)
         if metadata:
             ticker = metadata["ticker"]
@@ -83,25 +83,25 @@ class SECUtils:
                 file_path = os.path.join(save_folder, file_name)
                 with open(file_path, "w") as f:
                     f.write(file_content)
-                return f"{ticker}: download succeeded. Saved to {file_path}"
+                return f"{ticker}: 下載成功。已儲存至 {file_path}"
             except:
-                return f"❌ {ticker}: downloaded failed: {url}"
+                return f"❌ {ticker}: 下載失敗：{url}"
         else:
-            return f"No 2023 10-K filing found for {ticker}"
+            return f"找不到 {ticker} 的 2023 年 10-K 申報文件"
 
     def download_10k_pdf(
-        ticker: Annotated[str, "ticker symbol"],
+        ticker: Annotated[str, "股票代碼"],
         start_date: Annotated[
-            str, "start date of the 10-k file search range, in yyyy-mm-dd format"
+            str, "10-k 檔案搜尋範圍的開始日期，格式為 yyyy-mm-dd"
         ],
         end_date: Annotated[
-            str, "end date of the 10-k file search range, in yyyy-mm-dd format"
+            str, "10-k 檔案搜尋範圍的結束日期，格式為 yyyy-mm-dd"
         ],
         save_folder: Annotated[
-            str, "name of the folder to store the downloaded pdf filing"
+            str, "儲存下載的 pdf 申報文件的資料夾名稱"
         ],
     ) -> str:
-        """Download the latest 10-K filing as pdf for a given ticker within a given time period."""
+        """在給定時間段內下載指定股票代碼的最新 10-K 申報文件 (pdf)。"""
         metadata = SECUtils.get_10k_metadata(ticker, start_date, end_date)
         if metadata:
             ticker = metadata["ticker"]
@@ -130,27 +130,27 @@ class SECUtils:
                 with open(file_path, "wb") as file:
                     for chunk in response.iter_content(chunk_size=8192):
                         file.write(chunk)
-                return f"{ticker}: download succeeded. Saved to {file_path}"
+                return f"{ticker}: 下載成功。已儲存至 {file_path}"
             except Exception as e:
-                return f"❌ {ticker}: downloaded failed: {filing_url}, {e}"
+                return f"❌ {ticker}: 下載失敗：{filing_url}, {e}"
         else:
-            return f"No 2023 10-K filing found for {ticker}"
+            return f"找不到 {ticker} 的 2023 年 10-K 申報文件"
 
     def get_10k_section(
-        ticker_symbol: Annotated[str, "ticker symbol"],
-        fyear: Annotated[str, "fiscal year of the 10-K report"],
+        ticker_symbol: Annotated[str, "股票代碼"],
+        fyear: Annotated[str, "10-K 報告的會計年度"],
         section: Annotated[
             str | int,
-            "Section of the 10-K report to extract, should be in [1, 1A, 1B, 2, 3, 4, 5, 6, 7, 7A, 8, 9, 9A, 9B, 10, 11, 12, 13, 14, 15]",
+            "要擷取的 10-K 報告章節，應為 [1, 1A, 1B, 2, 3, 4, 5, 6, 7, 7A, 8, 9, 9A, 9B, 10, 11, 12, 13, 14, 15]",
         ],
         report_address: Annotated[
             str,
-            "URL of the 10-K report, if not specified, will get report url from fmp api",
+            "10-K 報告的 URL，如果未指定，將從 fmp api 取得報告 url",
         ] = None,
         save_path: SavePathType = None,
     ) -> str:
         """
-        Get a specific section of a 10-K report from the SEC API.
+        從 SEC API 取得 10-K 報告的特定章節。
         """
         if isinstance(section, int):
             section = str(section)
@@ -162,7 +162,7 @@ class SECUtils:
             "9B",
         ] + [str(i) for i in range(1, 16)]:
             raise ValueError(
-                "Section must be in [1, 1A, 1B, 2, 3, 4, 5, 6, 7, 7A, 8, 9, 9A, 9B, 10, 11, 12, 13, 14, 15]"
+                "章節必須在 [1, 1A, 1B, 2, 3, 4, 5, 6, 7, 7A, 8, 9, 9A, 9B, 10, 11, 12, 13, 14, 15] 中"
             )
 
         # os.makedirs(f"{self.project_dir}/10k", exist_ok=True)
@@ -178,7 +178,7 @@ class SECUtils:
             if report_address.startswith("Link: "):
                 report_address = report_address.lstrip("Link: ").split()[0]
             else:
-                return report_address  # debug info
+                return report_address  # 除錯資訊
 
         cache_path = os.path.join(
             CACHE_PATH, f"sec_utils/{ticker_symbol}_{fyear}_{section}.txt"

@@ -18,7 +18,7 @@ def _search_url(cik: Union[str, int]) -> str:
 
 
 def get_cik_by_ticker(ticker: str) -> str:
-    """Gets a CIK number from a stock ticker by running a search on the SEC website."""
+    """透過在 SEC 網站上執行搜尋，從股票代碼取得 CIK 號碼。"""
     cik_re = re.compile(r".*CIK=(\d{10}).*")
     url = _search_url(ticker)
     headers = {
@@ -30,7 +30,7 @@ def get_cik_by_ticker(ticker: str) -> str:
     # 'accept-language': 'en-US,en;q=0.9',
     # 'cache-control': 'max-age=0',
     # 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
-    # # Add more headers as needed
+    # # 視需要新增更多標頭
     # }
     company = "Indiana-University-Bloomington"
     email = "athecolab@gmail.com"
@@ -72,13 +72,13 @@ def sec_save_pdfs(
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     }
-    # Send a GET request to the URL with headers
+    # 向 URL 發送帶有標頭的 GET 請求
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
         json_data = response.json()
     else:
-        print(f"Error: Unable to fetch data. Status code: {response.status_code}")
+        print(f"錯誤：無法擷取資料。狀態碼：{response.status_code}")
 
     form_lists = []
     filings = json_data["filings"]
@@ -123,9 +123,9 @@ def _convert_html_to_pdfs(html_urls, base_path: str):
     metadata_json = {}
     for html_url in html_urls:
         pdf_path = html_url[0].split("/")[-1]
-        # Add the filing type
+        # 新增申報類型
         pdf_path = pdf_path.replace(".htm", f"-{html_url[1]}.pdf")
-        # /A for amended is not a valid path
+        # /A for amended 不是有效的路徑
         pdf_path = pdf_path.replace("10-K/A", "10-KA")
         metadata_json[pdf_path] = {"languages": ["English"]}
         pdf_path = os.path.join(base_path, pdf_path)

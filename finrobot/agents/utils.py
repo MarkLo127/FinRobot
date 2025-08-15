@@ -2,17 +2,17 @@ import re
 from .prompts import order_template
 
 
-def instruction_trigger(sender):
-    # Check if the last message contains the path to the instruction text file
+def def instruction_trigger(sender):
+    # 檢查最後一則訊息是否包含指令文字檔案的路徑
     return "instruction & resources saved to" in sender.last_message()["content"]
 
 
 def instruction_message(recipient, messages, sender, config):
-    # Extract the path to the instruction text file from the last message
+    # 從最後一則訊息中提取指令文字檔案的路徑
     full_order = recipient.chat_messages_for_summary(sender)[-1]["content"]
     txt_path = full_order.replace("instruction & resources saved to ", "").strip()
     with open(txt_path, "r") as f:
-        instruction = f.read() + "\n\nReply TERMINATE at the end of your response."
+        instruction = f.read() + "\n\n在您的回覆結尾處回覆 TERMINATE。"
     return instruction
 
 
@@ -24,7 +24,7 @@ def order_trigger(sender, name, pattern):
 
 def order_message(pattern, recipient, messages, sender, config):
     full_order = recipient.chat_messages_for_summary(sender)[-1]["content"]
-    pattern = rf"\[{pattern}\](?::)?\s*(.+?)(?=\n\[|$)"
+    pattern = rf"[{pattern}](?::)?\s*(.+?)(?=\n[|$)"
     match = re.search(pattern, full_order, re.DOTALL)
     if match:
         order = match.group(1).strip()
