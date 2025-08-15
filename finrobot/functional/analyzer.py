@@ -405,4 +405,3 @@ class ReportAnalysisUtils:
             ),
         }
         return result
- result}

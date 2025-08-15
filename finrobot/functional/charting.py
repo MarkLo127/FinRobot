@@ -113,7 +113,7 @@ class ReportChartUtils:
         plt.plot(
             company_change.index,
             company_change,
-            label=f'{info["shortName']} 變動率 %',
+            label=f'{info["shortName"]} 變動率 %',
             color="blue",
         )
         plt.plot(
@@ -121,7 +121,7 @@ class ReportChartUtils:
         )
 
         # 設定標題和標籤
-        plt.title(f'{info["shortName']} vs S&P 500 - 過去一年變動率 %')
+        plt.title(f'{info["shortName"]} vs S&P 500 - 過去一年變動率 %')
         plt.xlabel("日期")
         plt.ylabel("變動率 %")
 

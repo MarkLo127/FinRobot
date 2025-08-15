@@ -2,7 +2,7 @@ import re
 from .prompts import order_template
 
 
-def def instruction_trigger(sender):
+def instruction_trigger(sender):
     # 檢查最後一則訊息是否包含指令文字檔案的路徑
     return "instruction & resources saved to" in sender.last_message()["content"]
 
