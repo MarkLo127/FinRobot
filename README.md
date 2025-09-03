@@ -2,6 +2,10 @@
 <img align="center" width="30%" alt="image" src="https://github.com/AI4Finance-Foundation/FinGPT/assets/31713746/e0371951-1ce1-488e-aa25-0992dafcc139">
 </div>
 
+<p align="right">
+<a href="README.md">English</a> | <a href="README_zh-TW.md">繁體中文</a>
+</p>
+
 # FinRobot: An Open-Source AI Agent Platform for Financial Analysis using Large Language Models
 [![Downloads](https://static.pepy.tech/badge/finrobot)]([https://pepy.tech/project/finrobot](https://pepy.tech/project/finrobot))
 [![Downloads](https://static.pepy.tech/badge/finrobot/week)](https://pepy.tech/project/finrobot)
