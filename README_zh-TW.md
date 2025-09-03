@@ -115,16 +115,10 @@ conda activate finrobot
 ```
 **2. 使用終端機或手動下載 FinRobot 儲存庫**
 ```shell
-git clone https://github.com/AI4Finance-Foundation/FinRobot.git
+git clone --recurse-submodules https://github.com/MarkLo127/FinRobot.git
 cd FinRobot
 ```
-**3. 從原始碼或 pypi 安裝 finrobot 及相依套件**
-
-從 pypi 取得我們最新的版本
-```bash
-pip install -U finrobot
-```
-或直接從此儲存庫安裝
+**3. 從原始碼安裝 finrobot 及相依套件**
 ```
 pip install -e .
 ```

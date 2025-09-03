@@ -122,16 +122,10 @@ conda activate finrobot
 ```
 **2. download the FinRobot repo use terminal or download it manually**
 ```shell
-git clone https://github.com/AI4Finance-Foundation/FinRobot.git
+git clone --recurse-submodules https://github.com/MarkLo127/FinRobot.git
 cd FinRobot
 ```
-**3. install finrobot & dependencies from source or pypi**
-
-get our latest release from pypi
-```bash
-pip install -U finrobot
-```
-or install from this repo directly
+**3. install finrobot from source**
 ```
 pip install -e .
 ```
